@@ -2,23 +2,10 @@ import { use, useState } from "react"
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-export function Loginpage() {
-    const [user, setUser] = useState(null);
-
-    return (
-        <main className="Flex">
-            <Register />
-            <Login setUser={setUser} />
-        </main>
-    )
-}
-
-export function Register() {
+export function Register() { 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const role = "parent";
 
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
@@ -28,7 +15,7 @@ export function Register() {
         const response = await fetch("http://localhost/blog/backend/register.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password, role }),
+            body: JSON.stringify({ name, email }),
         });
 
         const data = await response.json();
@@ -68,19 +55,6 @@ export function Register() {
 
                             />
                         </label>
-                        <label>
-                            <h3 className={"formTitle"}>WACHTWOORD</h3>
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className={"formInput"}
-
-                            />
-                        </label>
-
                     </div>
                     <button type="submit"
                         className={"loginButton"}
@@ -95,7 +69,6 @@ export function Register() {
 
 export function Login() {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
