@@ -9,10 +9,14 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <nav>
+        <div className="Navigation">
+          <h1>Jessica vd Zwaag</h1>
+        <nav className="Navigation-Links">
           <Link to="homepage">Home</Link>
           <Link to="loginpage">Login / Register</Link>
         </nav>
+        </div>
+
 
         <Routes>
           <Route path="homepage" element={<Homepage/>} />

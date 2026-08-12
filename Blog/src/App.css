@@ -1,0 +1,186 @@
+/* =========================
+   Reset
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    background-color: #F3E4C9;
+    color: #3E2A1F;
+    font-family: "Courier New", Courier, monospace;
+}
+
+
+/* =========================
+   Navigation
+========================= */
+
+.Navigation {
+    width: 100%;
+    min-height: 7rem;
+    padding: 1.5rem 5%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #8A5F41;
+    color: #FFFFFF;
+
+    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.Navigation h1 {
+    font-size: 2.4rem;
+    letter-spacing: 0.1rem;
+}
+
+.Navigation-Links {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.Navigation-Links a {
+    padding: 0.8rem 1.2rem;
+
+    color: #FFFFFF;
+    font-size: 1.8rem;
+    text-decoration: none;
+
+    border-radius: 0.5rem;
+
+    transition:
+        color 0.3s ease,
+        background-color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.Navigation-Links a:hover {
+    color: #8A5F41;
+    background-color: #F3E4C9;
+    transform: translateY(-0.2rem);
+}
+
+
+/* =========================
+   Main
+========================= */
+
+main {
+    width: 90vw;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+
+/* =========================
+   Flex
+========================= */
+
+.Flex {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 2rem;
+}
+
+
+/* =========================
+   Login / Register
+========================= */
+
+.loginRegisterContainer {
+    width: 40%;
+    padding: 2rem;
+
+    background-color: #A77F60;
+    border: 0.5rem solid #3E2A1F;
+    border-radius: 0.8rem;
+}
+
+
+/* =========================
+   Form
+========================= */
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.formHeader {
+    font-size: 2.5rem;
+}
+
+.formContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.formTitle {
+    font-size: 2rem;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    font-size: 1.6rem;
+}
+
+input {
+    padding: 1rem;
+
+    font-family: inherit;
+    font-size: 1.6rem;
+    color: #3E2A1F;
+
+    background-color: #F3E4C9;
+    border: 0.2rem solid #3E2A1F;
+    border-radius: 0.5rem;
+
+    outline: none;
+}
+
+input:focus {
+    border-color: #8A5F41;
+    box-shadow: 0 0 0 0.2rem rgba(138, 95, 65, 0.25);
+}
+
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 768px) {
+    .Navigation {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .Navigation-Links {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .Flex {
+        flex-direction: column;
+    }
+
+    .loginRegisterContainer {
+        width: 100%;
+    }
+}
