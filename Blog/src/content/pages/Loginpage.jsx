@@ -2,10 +2,12 @@ import { use, useState } from "react"
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-export function Register() { 
+export function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
 
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
@@ -15,7 +17,7 @@ export function Register() {
         const response = await fetch("http://localhost/blog/backend/register.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email }),
+            body: JSON.stringify({ name, email, password }),
         });
 
         const data = await response.json();
@@ -55,6 +57,17 @@ export function Register() {
 
                             />
                         </label>
+                        <label>
+                            <h3>PASSWORD</h3>
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className={"formInput"}
+                            />
+                        </label>
                     </div>
                     <button type="submit"
                         className={"loginButton"}
@@ -71,6 +84,8 @@ export function Login() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
     const [user, setUser] = useState(null);
+    const [password, setPassword] = useState("");
+
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -101,16 +116,18 @@ export function Login() {
                 setUser(data.user);
                 setMessage("Succesvol ingelogd!");
 
-                if (data.user.role === "parent") {
-                    navigate("/parent");
-                } else if (data.user.role === "admin") {
+                if (data.user.admin === 1) {
                     navigate("/admin");
+                    
+                } else if (data.user.role === 0) {
+                    navigate("/home");
                 }
             } else {
                 setMessage("Onjuiste gegevens.");
             }
         } catch (err) {
             setMessage("Er ging iets mis.");
+            console.log(err);
         }
 
         setLoading(false);
