@@ -1,7 +1,23 @@
 import { use, useState } from "react"
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import "./../../App.css";
 
+export function RL() {
+    return (
+        <main>
+            <section className="header">
+                <h1>Newsletter</h1>
+                <article className="header-info">
+                    <h2>About : </h2>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni atque unde quibusdam commodi, dolorem maiores, tempore iusto quos doloremque natus dolor hic tempora quidem rem. Fuga quas maiores sint assumenda.</p>
+                </article>
+            </section>
+            <Register />
+            <Login />
+        </main>
+    )
+}
 export function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -29,13 +45,13 @@ export function Register() {
     };
 
     return (
-        <section className={"loginRegisterContainer"}>
+        <section className="main-content">
             <article className={"formContainer"}>
-                <h1 className={"formHeader"}>REGISTREREN</h1>
-                <form onSubmit={handleSubmit} className={"formContent"}>
+                <h1 className={"main-content-header"}>REGISTREREN</h1>
+                <form onSubmit={handleSubmit} className={"main-content-card"}>
                     <div className={"formInfo"}>
-                        <label>
-                            <h3 className={"formTitle"}>NAAM</h3>
+                        <label className="formContent">
+                            <h3 className={"formTitle"}>Name</h3>
                             <input
                                 type="text"
                                 placeholder="Name"
@@ -45,8 +61,8 @@ export function Register() {
                                 className={"formInput"}
                             />
                         </label>
-                        <label>
-                            <h3 className={"formTitle"}>E-MAIL</h3>
+                        <label className="formContent">
+                            <h3 className={"formTitle"}>E-mail</h3>
                             <input
                                 type="email"
                                 placeholder="Email"
@@ -57,8 +73,8 @@ export function Register() {
 
                             />
                         </label>
-                        <label>
-                            <h3>PASSWORD</h3>
+                        <label className="formContent">
+                            <h3>Password</h3>
                             <input
                                 type="password"
                                 placeholder="Password"
@@ -77,6 +93,7 @@ export function Register() {
                 </form>
             </article>
         </section>
+
     );
 }
 
@@ -118,7 +135,7 @@ export function Login() {
 
                 if (data.user.admin === 1) {
                     navigate("/admin");
-                    
+
                 } else if (data.user.role === 0) {
                     navigate("/home");
                 }
@@ -134,31 +151,36 @@ export function Login() {
     };
 
     return (
-        <section className={"loginRegisterContainer"}>
-            <article className={"formContainer"}>
-                <h1 className={"formHeader"}>LOGIN</h1>
+        <section className="main-content">
 
-                <form onSubmit={handleSubmit} className={"formContent"}>
+            <article className="formContainer">
+                <h1 className={"main-content-header"}>LOGIN</h1>
+
+                <form onSubmit={handleSubmit} className={"main-content-card"}>
                     <div className={"formInfo"}>
-                        <label className={"formTitle"}>E-MAIL</label>
-                        <input
-                            type="email"
-                            placeholder="jouw@email.nl"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            className={"formInput"}
-                        />
+                        <label className={"formContent"}>
+                            <h3>E-mail</h3>
+                            <input
+                                type="email"
+                                placeholder="jouw@email.nl"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className={"formInput"}
+                            />
+                        </label>
 
-                        <label className={"formTitle"}>WACHTWOORD</label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            className={"formInput"}
-                        />
+                        <label className={"formContent"}>
+                            <h3>WACHTWOORD</h3>
+                            <input
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className={"formInput"}
+                            />
+                        </label>
                     </div>
 
                     <button
@@ -173,5 +195,6 @@ export function Login() {
                 {message && <p className={"message"}>{message}</p>}
             </article>
         </section>
+
     );
 }

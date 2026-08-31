@@ -1,3 +1,36 @@
+/* ========================================
+   BASIC SETTINGS
+======================================== */
+
+:root {
+    --bgColor: #FFF7F3;
+    --purpleColor: #C599B6;
+    --darkerPurple: #86697d;
+    --darkPurple: #5d4957;
+    --orangeColor: #FAD0C4;
+    --pinkColor: #E6B2BA;
+    --white: #ffffff;
+    --shadow: rgba(93, 73, 87, 0.2);
+
+    --HeaderFont: "HeaderFont";
+    --normalFont: "normalFont";
+}
+
+@font-face {
+    font-family: "HeaderFont";
+    src: url("./assets/ALBAS___.TTF");
+}
+
+@font-face {
+    font-family: "normalFont";
+    src: url("./assets/BUBBLEBO.ttf");
+}
+
+
+/* ========================================
+   RESET
+======================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,146 +39,423 @@
 
 html {
     font-size: 62.5%;
+    scroll-behavior: smooth;
 }
 
 body {
-    background-color: #F3E4C9;
-    color: #3E2A1F;
-    font-family: "Courier New", Courier, monospace;
+    min-height: 100vh;
+    background-color: var(--bgColor);
+    font-family: var(--normalFont);
+    color: var(--darkPurple);
 }
+
+
+/* ========================================
+   TYPOGRAPHY
+======================================== */
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--HeaderFont);
+    color: var(--darkerPurple);
+}
+
+a {
+    font-size: 1.6rem;
+    color: var(--white);
+    text-decoration: none;
+}
+
+
+/* ========================================
+   NAVIGATION
+======================================== */
 
 .Navigation {
     width: 100%;
-    min-height: 7rem;
-    padding: 1.5rem 5%;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    background-color: #8A5F41;
-    color: #FFFFFF;
-
-    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-.Navigation h1 {
-    font-size: 2.4rem;
-    letter-spacing: 0.1rem;
+    padding: 1.5rem 3rem;
+    background-color: var(--purpleColor);
+    box-shadow: 0 0.4rem 1rem var(--shadow);
 }
 
 .Navigation-Links {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 3rem;
 }
 
 .Navigation-Links a {
-    padding: 0.8rem 1.2rem;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease;
+}
 
-    color: #FFFFFF;
-    font-size: 1.8rem;
-    text-decoration: none;
-
-    border-radius: 0.5rem;
-
-    transition:
-        color 0.3s ease,
-        background-color 0.3s ease,
-        transform 0.3s ease;
+.Navigation-Links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0.2rem;
+    background-color: var(--white);
+    transition: width 0.3s ease;
 }
 
 .Navigation-Links a:hover {
-    color: #8A5F41;
-    background-color: #F3E4C9;
-    transform: translateY(-0.2rem);
+    color: var(--darkPurple);
 }
+
+.Navigation-Links a:hover::after {
+    width: 100%;
+}
+
+
+/* ========================================
+   MAIN LAYOUT
+======================================== */
+
 main {
-    width: 90vw;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.Flex {
+    width: 100%;
+    min-height: 70vh;
     display: flex;
-    justify-content: space-evenly;
-    gap: 2rem;
+    background-color: var(--bgColor);
 }
 
-.loginRegisterContainer {
-    width: 40%;
-    padding: 2rem;
 
-    background-color: #A77F60;
-    border: 0.5rem solid #3E2A1F;
-    border-radius: 0.8rem;
-}
+/* ========================================
+   SIDEBAR / HEADER
+======================================== */
 
-.formContainer {
+.header {
+    width: 25%;
+    min-height: 100%;
+    padding: 3rem;
+    background-color: var(--pinkColor);
+
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 5rem;
+
+    box-shadow: 0.4rem 0 1rem var(--shadow);
 }
 
-.formHeader {
-    font-size: 2.5rem;
+.header h1 {
+    font-size: 3.6rem;
+    color: var(--white);
+    letter-spacing: 0.3rem;
+
+    text-shadow: 0.3rem 0.3rem 0 var(--darkPurple);
+
+    padding-bottom: 1rem;
+    border-bottom: 0.4rem solid var(--darkPurple);
 }
 
-.formContent {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.formTitle {
-    font-size: 2rem;
-}
-
-label {
+.header-info {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-bottom: 1rem;
+}
 
+.header-info h2 {
+    font-size: 2.8rem;
+    color: var(--white);
+    text-shadow: 0.2rem 0.2rem 0 var(--darkPurple);
+}
+
+.header-info p {
+    font-size: 1.5rem;
+    line-height: 1.6;
+}
+
+
+/* ========================================
+   MAIN CONTENT
+======================================== */
+
+.main-content {
+    flex: 1;
+    padding: 3rem;
+
+    background-color: var(--orangeColor);
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.main-content-header {
+    align-self: flex-start;
+
+    font-size: 2.8rem;
+    color: var(--darkPurple);
+
+    text-shadow: 0.2rem 0.2rem 0.5rem rgba(235, 188, 221, 0.8);
+}
+
+
+/* ========================================
+   CARDS
+======================================== */
+
+.main-content-card {
+    width: 100%;
+    padding: 2rem;
+
+    background-color: var(--white);
+    border: 0.3rem solid var(--darkerPurple);
+    border-radius: 1rem;
+
+    box-shadow: 0 0.5rem 1rem var(--shadow);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.main-content-card:hover {
+    transform: translateY(-0.3rem);
+    box-shadow: 0 0.8rem 1.5rem var(--shadow);
+}
+
+.main-content-card h2 {
+    font-size: 2.2rem;
+}
+
+
+/* ========================================
+   POSTS
+======================================== */
+
+.main-content-post {
+    width: min(60rem, 100%);
+    padding: 2rem;
+
+    background-color: var(--white);
+    border: 0.3rem solid var(--darkPurple);
+    border-radius: 1rem;
+
+    display: flex;
+    gap: 2rem;
+
+    box-shadow: 0 0.5rem 1rem var(--shadow);
+
+    transition: transform 0.3s ease;
+}
+
+.main-content-post:hover {
+    transform: translateY(-0.3rem);
+}
+
+.main-content-post h2 {
+    font-size: 3rem;
+}
+
+
+/* ========================================
+   FORM
+======================================== */
+
+.formContainer {
+    width: min(45rem, 100%);
+    padding: 2.5rem;
+
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 0.3rem solid var(--darkerPurple);
+    border-radius: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+
+    box-shadow: 0 0.5rem 1rem var(--shadow);
+}
+
+.formInfo {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    margin-bottom: 1rem;
+}
+
+.formInfo h3 {
+    font-size: 2rem;
+    color: var(--darkPurple);
+}
+
+.formContent {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.formContent label {
     font-size: 1.6rem;
 }
 
-input {
-    padding: 1rem;
+.formInput {
+    width: 70%;
+    padding: 0.8rem 1rem;
 
-    font-family: inherit;
+    font-family: var(--normalFont);
     font-size: 1.6rem;
-    color: #3E2A1F;
 
-    background-color: #F3E4C9;
-    border: 0.2rem solid #3E2A1F;
-    border-radius: 0.5rem;
+    background-color: var(--white);
+    color: var(--darkPurple);
+
+    border: 0.2rem solid var(--purpleColor);
+    border-radius: 0.6rem;
 
     outline: none;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-input:focus {
-    border-color: #8A5F41;
-    box-shadow: 0 0 0 0.2rem rgba(138, 95, 65, 0.25);
+.formInput:focus {
+    border-color: var(--darkerPurple);
+    box-shadow: 0 0 0 0.3rem rgba(197, 153, 182, 0.25);
 }
+
+.loginButton {
+    width: 100%;
+    padding: 1rem;
+
+    font-family: var(--normalFont);
+    font-size: 1.6rem;
+
+    color: var(--white);
+    background-color: var(--darkerPurple);
+
+    border: none;
+    border-radius: 0.6rem;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.3s ease,
+        transform 0.2s ease;
+}
+
+.loginButton:hover {
+    background-color: var(--darkPurple);
+    transform: translateY(-0.2rem);
+}
+
+.loginButton:active {
+    transform: translateY(0);
+}
+
+
+/* ========================================
+   FOOTER
+======================================== */
+
+.footer {
+    padding: 3rem;
+
+    background-color: var(--darkerPurple);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+}
+
+.footer-Content {
+    color: var(--white);
+    font-size: 1.8rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
 
 @media (max-width: 768px) {
+
     .Navigation {
-        flex-direction: column;
-        gap: 1.5rem;
+        padding: 1.5rem;
     }
 
     .Navigation-Links {
-        gap: 1rem;
-        flex-wrap: wrap;
         justify-content: center;
+        gap: 2rem;
     }
 
-    .Flex {
+    main {
         flex-direction: column;
     }
 
-    .loginRegisterContainer {
+    .header {
+        width: 100%;
+        min-height: auto;
+        padding: 2.5rem;
+        gap: 2.5rem;
+    }
+
+    .header h1 {
+        font-size: 3rem;
+    }
+
+    .main-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .main-content-post {
+        width: 100%;
+    }
+
+    .formContainer {
+        width: 100%;
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    html {
+        font-size: 56.25%;
+    }
+
+    .Navigation-Links {
+        flex-wrap: wrap;
+    }
+
+    .header {
+        padding: 2rem;
+    }
+
+    .main-content {
+        padding: 1.5rem;
+    }
+
+    .formContent {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .formInput {
         width: 100%;
     }
 }
