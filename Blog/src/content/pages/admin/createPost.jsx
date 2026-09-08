@@ -14,8 +14,8 @@ export function CreatePost() {
                     >
                         <option value="">Choose a Category</option>
                         <option value="news">News</option>
-                        <option value="story">Story</option>
                         <option value="bookReview">Book Review</option>
+                        <option value="movieReview">movie Review</option>
                     </select>
                 </label>
             </form>
@@ -25,6 +25,9 @@ export function CreatePost() {
             )}
             {category === "bookReview" && (
                 <BookReview />
+            )}
+            {category == "movieReview" && (
+                <MovieReview />
             )}
         </article>
     );
@@ -97,6 +100,7 @@ function NewsForm() {
     const [title, setTitle] = useState("");
     const [text, setText] = useState("");
     const [message, setMessage] = useState("");
+    const [description, setDescription] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -112,6 +116,7 @@ function NewsForm() {
                     body: JSON.stringify({
                         category: "news",
                         title: title,
+                        description: description,
                         text: text
                     })
                 }
@@ -145,7 +150,14 @@ function NewsForm() {
                         required
                     />
                 </label>
-
+                <label>
+                    <h4>Description</h4>
+                    <input type="text"
+                        className="formInput"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </label>
                 <label>
                     <h4>Text</h4>
                     <textarea
@@ -155,9 +167,8 @@ function NewsForm() {
                         required
                     />
                 </label>
-                <button type="submit">
-                    Post
-                </button>
+                <button type="submit" className="loginButton">Post</button>
+
 
                 <p>{message}</p>
 
@@ -169,6 +180,8 @@ function NewsForm() {
 function BookReview() {
     const [title, setTitle] = useState("");
     const [stars, setStars] = useState("");
+    const [description, setDescription] = useState("");
+    const [review, setReview] = useState("");
     const [message, setMessage] = useState("");
 
     const handleSubmit = async (e) => {
@@ -180,7 +193,9 @@ function BookReview() {
             body: JSON.stringify({
                 category: "bookReview",
                 title: title,
-                stars: stars
+                stars: stars,
+                description: description,
+                review: review
             })
         });
 
@@ -198,14 +213,112 @@ function BookReview() {
                 <h1>Book Review</h1>
                 <label>
                     <h4>Title</h4>
-                    <input type="text" value={title} onChange={(e) => setTitle((e).target.value)} />
+                    <input type="text"
+                        value={title}
+                        onChange={(e) => setTitle((e).target.value)}
+                        className="formInput"
+                    />
+                </label>
+                <label>
+                    <h4>Description</h4>
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription((e).target.value)} />
                 </label>
                 <label>
                     <h4>Rating</h4>
-                    <input type="number" max="5" value={stars} onChange={(e) => setStars(e.target.value)} />
+                    <input type="number"
+                        max="5"
+                        value={stars}
+                        onChange={(e) => setStars(e.target.value)}
+                        className="formInput"
+                    />
                 </label>
-                <button type="submit">Post</button>
+                <label>
+                    <h3>Review</h3>
+                    <textarea className="formInput"
+                    value={review}
+                    onChange={(e) => setReview((e).target.value)}/>
+                </label>
+                <button type="submit" className="loginButton">Post</button>
             </form>
+            <p>{message}</p>
+        </article>
+    )
+}
+
+
+function MovieReview() {
+    const [title, setTitle] = useState("");
+    const [stars, setStars] = useState("");
+    const [description, setDescription] = useState("");
+    const [review, setReview] = useState("");
+    const [message, setMessage] = useState("");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const response = await fetch("http://localhost/blog/backend/createPost.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                category: "movieReview",
+                title: title,
+                stars: stars,
+                description: description,
+                review: review
+            })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            setMessage("Send data Complete");
+        } else {
+            setMessage(data.message || "Failed");
+        }
+    };
+
+    return (
+        <article>
+            <form onSubmit={handleSubmit}>
+                <h1>Movie Review</h1>
+                <label>
+                    <h4>Title</h4>
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle((e).target.value)}
+                        className="formInput"
+                    />
+                </label>
+                <label>
+                    <h4>Description</h4>
+                    <input
+                        type="text"
+                        className="formInput"
+                        value={description}
+                        onChange={(e) => setDescription((e).target.value)} />
+                </label>
+                <label>
+                    <h4>Rating</h4>
+                    <input
+                        type="number"
+                        max="5"
+                        value={stars}
+                        onChange={(e) => setStars(e.target.value)}
+                        className="formInput"
+                    />
+                </label>
+                <label>
+                    <h4>Review</h4>
+                    <textarea className="formInput"
+                        value={review}
+                        onChange={(e) => setReview((e.target.value))} />
+                </label>
+                <button type="submit" className="loginButton">Post</button>
+            </form>
+            <p>{message}</p>
         </article>
     )
 }

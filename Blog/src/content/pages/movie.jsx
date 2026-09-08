@@ -1,4 +1,22 @@
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
+
 export function Movie() {
+    const [movie, setMovie] = useState([]);
+    const [loading, setLoading] = useState("");
+
+    useEffect(() => {
+        fetch("http://localhost/blog/backend/movieLoad.php")
+            .then(res => res.json())
+            .then(data => {
+                setMovie(data.slice(0, 4));
+                setLoading(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+            });
+    })
     return (
         <main>
             <section className="header">
@@ -10,9 +28,18 @@ export function Movie() {
             </section>
             <section className="main-content">
                 <h2 className="main-content-header">Movie Reviews: </h2>
-                <article className="main-content-card">
+                {movie.map((item) => (
+                    <article className="main-content-card">
+                        <h2>{item.Title}</h2>
+                        <div key={item.MovieReview_ID}>
+                            <p className="Description">{item.Description}</p>
+                            <Link to={`/movie/${item.MovieReview_ID}`}>
+                                <button className="RmButton">Read More</button>
+                            </Link>
+                        </div>
+                    </article>
+                ))}
 
-                </article>
             </section>
 
         </main>

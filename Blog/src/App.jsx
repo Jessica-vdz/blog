@@ -10,6 +10,9 @@ import { News } from './content/pages/news';
 import { Footer } from './content/components/footer';
 import { Books } from './content/pages/books';
 import { Movie } from './content/pages/movie';
+import {NewsPost} from './content/pages/newsPost';
+import { BookPost } from './content/pages/bookPost';
+import { MoviePost } from './content/pages/moviePost';
 
 function App() {
   return (
@@ -20,7 +23,6 @@ function App() {
           <nav className="Navigation-Links">
             <Link to="/">Home</Link>
             <Link to="news">News</Link>
-            <Link to="/">Projects</Link>
             <Link to="books">Books</Link>
             <Link to="movie">Movie</Link>
             <Link to="register">Newsletter</Link>
@@ -30,8 +32,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path='news' element={<News />} />
+          <Route path='/news/:id' element={<NewsPost/>}/>
           <Route path='books' element={<Books/>} />
+          <Route path='/books/:id' element={<BookPost/>}/>
           <Route path='movie' element={<Movie/>}/>
+          <Route path='/movie/:id' element={<MoviePost/>}/>
           <Route path="register" element={<RL />} />
           <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
         </Routes>

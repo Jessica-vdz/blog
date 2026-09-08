@@ -28,16 +28,7 @@ export function Homepage() {
                 </article>
             </header>
             <section className="main-content">
-                <h2 className="main-content-header">Latest:</h2>
-                {latest.map((latest) => (
-                    <article key={latest.Latest_ID} className="main-content-card">
-                        <h2>{latest.Title}</h2>
-                        <div className="">
-                            <p>{latest.Description}</p>
-                            <button>Read More</button>
-                        </div>
-                    </article>
-                ))}
+
             </section>
             <section>
             </section>

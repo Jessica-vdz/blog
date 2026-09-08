@@ -28,12 +28,14 @@ export function News() {
             </section>
             <section className="main-content">
                 <h2 className="main-content-header">News Articles: </h2>
-                {news.map((news) => (
+                {news.map((item) => (
                     <article className="main-content-card">
-                        <h2>{news.Title}</h2>
-                        <div key={news.News_ID} className="news-container">
-                            <p className="">{news.Text}</p>
-                            <button>Read More</button>
+                        <h2>{item.Title}</h2>
+                        <div key={item.News_ID} className="news-container">
+                            <p className="Description">{item.Description}</p>
+                            <Link to={`/news/${item.News_ID}`}>
+                                <button className="RmButton">Read More</button>
+                            </Link>
                         </div>
                     </article>
                 ))}
