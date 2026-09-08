@@ -1,4 +1,5 @@
 import { useState } from "react"
+
 export function Mailbot() {
     const [text, setText] = useState("");
     const [subject, setSubject] = useState("");
