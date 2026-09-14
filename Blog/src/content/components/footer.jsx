@@ -1,4 +1,4 @@
-import '../../App.css'
+import '../../App.css' // dit kan via een json dynamisch geladen worden :) 
 export function Footer(){
     return(
         <footer className="footer">
@@ -9,10 +9,6 @@ export function Footer(){
             <section className='footer-Content'>
                 <p>Instagram</p>
                 <p>Linkedin</p>
-            </section>
-            <section className='footer-Content'>
-                <p>Blog</p>
-                <p>Login</p>
             </section>
         </footer>
     )

@@ -40,9 +40,12 @@ export function MoviePost() {
                 <article className="main-content-card">
                     <div className="main-content-card-header">
                         <h2>{movie.Title}</h2>
-                        <h4>{movie.Stars} / 5</h4>
+                        <h2>{movie.Stars} / 5</h2>
                     </div>
-                    <p>{movie.Review}</p>
+                    <div>
+                        <p>{movie.Review}</p>
+
+                    </div>
                 </article>
 
             </section>

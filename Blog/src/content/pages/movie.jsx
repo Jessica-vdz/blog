@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 
@@ -30,7 +31,9 @@ export function Movie() {
                 <h2 className="main-content-header">Movie Reviews: </h2>
                 {movie.map((item) => (
                     <article className="main-content-card">
-                        <h2>{item.Title}</h2>
+                        <div>
+                            <h2>{item.Title}</h2>
+                        </div>
                         <div key={item.MovieReview_ID}>
                             <p className="Description">{item.Description}</p>
                             <Link to={`/movie/${item.MovieReview_ID}`}>

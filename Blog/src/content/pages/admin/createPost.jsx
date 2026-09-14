@@ -182,6 +182,7 @@ function BookReview() {
     const [stars, setStars] = useState("");
     const [description, setDescription] = useState("");
     const [review, setReview] = useState("");
+    const [author, setAuthor] = useState("");
     const [message, setMessage] = useState("");
 
     const handleSubmit = async (e) => {
@@ -195,7 +196,8 @@ function BookReview() {
                 title: title,
                 stars: stars,
                 description: description,
-                review: review
+                review: review,
+                author: author
             })
         });
 
@@ -211,20 +213,33 @@ function BookReview() {
         <article>
             <form onSubmit={handleSubmit}>
                 <h1>Book Review</h1>
-                <label>
-                    <h4>Title</h4>
-                    <input type="text"
-                        value={title}
-                        onChange={(e) => setTitle((e).target.value)}
-                        className="formInput"
-                    />
-                </label>
+                <div>
+                    <label>
+                        <h4>Title</h4>
+                        <input type="text"
+                            value={title}
+                            onChange={(e) => setTitle((e).target.value)}
+                            className="formInput"
+                        />
+                    </label>
+                    <label>
+                        <h4>Author</h4>
+                        <input type="text"
+                            value={author}
+                            onChange={(e) => setAuthor((e).target.value)}
+                            className="formInput"
+                        />
+                    </label>
+                </div>
+
                 <label>
                     <h4>Description</h4>
                     <input
                         type="text"
                         value={description}
-                        onChange={(e) => setDescription((e).target.value)} />
+                        onChange={(e) => setDescription((e).target.value)}
+                        className="formInput"
+                    />
                 </label>
                 <label>
                     <h4>Rating</h4>
@@ -238,8 +253,8 @@ function BookReview() {
                 <label>
                     <h3>Review</h3>
                     <textarea className="formInput"
-                    value={review}
-                    onChange={(e) => setReview((e).target.value)}/>
+                        value={review}
+                        onChange={(e) => setReview((e).target.value)} />
                 </label>
                 <button type="submit" className="loginButton">Post</button>
             </form>

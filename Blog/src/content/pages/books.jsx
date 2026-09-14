@@ -30,7 +30,10 @@ export function Books() {
                 <h2 className="main-content-header">Book Reviews: </h2>
                 {book.map((item) => (
                     <article className="main-content-card">
-                        <h2>{item.title}</h2>
+                        <div>
+                            <h2>{item.Title}</h2>
+                            <h2>{item.Author}</h2>
+                        </div>
                         <div key={item.BookReview_ID}>
                             <p className="Description">{item.Description}</p>
                             <Link to={`/books/${item.BookReview_ID}`}>

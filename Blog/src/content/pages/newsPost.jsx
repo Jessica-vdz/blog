@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { News } from "./news";
 
 export function NewsPost() {
     const { id } = useParams();
@@ -29,10 +30,25 @@ export function NewsPost() {
 
     }
 
-    return(
+    return (
         <main>
-            <h1>{news.Title}</h1>
-            <p>{news.Text}</p>
+            <section className="header">
+                <h1>News</h1>
+                <article className="header-info">
+                    <h2>About</h2>
+                    <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic iusto tempore, deserunt maiores beatae, consectetur modi dolores facilis debitis minus odio. Iusto rerum suscipit voluptas fugiat quidem nisi laborum laudantium.</p>
+                </article>
+            </section>
+            <section className="main-content">
+                <article className="main-content-card">
+                    <div className="main-content-card-header">
+                        <h2>{news.Title}</h2>
+                    </div>
+                    <div>
+                        <p>{news.Text}</p>
+                    </div>
+                </article>
+            </section>
         </main>
     )
 }

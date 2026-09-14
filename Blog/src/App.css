@@ -1038,3 +1038,13 @@ main {
         animation-duration: 0.01ms !important;
     }
 }
+.main-admin{
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    background-color: #2f2730;
+}
+.main-edit{
+    width: 40%;
+    background-color: #fff;
+}

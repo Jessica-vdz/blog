@@ -2,8 +2,12 @@ import { CreatePost, SendToLatest } from "./admin/createPost"
 import { Mailbot } from "../components/mailbot"
 import { Navigate, useNavigate } from "react-router-dom"
 import '../../App'
+import { EditPost } from "./admin/editPost"
+import { useState } from "react"
 
 export function Admin() {
+
+   const [action, setAction] = useState("");
 
    return (
       <main>
@@ -12,11 +16,25 @@ export function Admin() {
             <Mailbot />
          </header>
          <section className="main-content" id="post-container">
-            <SendToLatest />
-            <CreatePost />
-         </section>
-         <section className="side-content">
-            <h2>Edit</h2>
+            <form>
+               <label>
+                  <select value={action} 
+                  onChange={(e) => setAction((e).target.value)} 
+                  required>
+                     <option value="">Choose a action</option>
+                     <option value="post">post</option>
+                     <option value="edit">edit</option>
+                  </select>
+               </label>
+            </form>
+
+            {action === "post" && (
+               <CreatePost/>
+            )}
+            {action === "edit" && (
+               <EditPost/>
+            )}
+
          </section>
       </main>
    )
