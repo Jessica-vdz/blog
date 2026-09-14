@@ -3,7 +3,7 @@ import { Mailbot } from "../components/mailbot"
 import { Navigate, useNavigate } from "react-router-dom"
 import '../../App'
 import { EditPost } from "./admin/editPost"
-import { useState } from "react"
+import { act, use, useState } from "react"
 
 export function Admin() {
 
@@ -18,9 +18,9 @@ export function Admin() {
          <section className="main-content" id="post-container">
             <form>
                <label>
-                  <select value={action} 
-                  onChange={(e) => setAction((e).target.value)} 
-                  required>
+                  <select value={action}
+                     onChange={(e) => setAction((e).target.value)}
+                     required>
                      <option value="">Choose a action</option>
                      <option value="post">post</option>
                      <option value="edit">edit</option>
@@ -28,11 +28,11 @@ export function Admin() {
                </label>
             </form>
 
-            {action === "post" && (
-               <CreatePost/>
+            { action === "post" && (
+               <CreatePost />
             )}
             {action === "edit" && (
-               <EditPost/>
+               <EditPost />
             )}
 
          </section>

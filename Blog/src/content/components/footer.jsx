@@ -1,4 +1,4 @@
-import '../../App.css' // dit kan via een json dynamisch geladen worden :) 
+import '../../App.css'
 export function Footer(){
     return(
         <footer className="footer">
