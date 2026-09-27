@@ -1,0 +1,56 @@
+services:
+  php:
+    image: wodby/php:latest
+    container_name: blog_php
+    volumes:
+      - './:/var/www/html'
+
+  nginx:
+    image: nginx:latest
+    container_name: blog_nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - php
+      - mariadb
+    links:
+      - php
+    volumes:
+      - './:/var/www/html'
+      - './docker:/etc/nginx/conf.d'
+
+  mariadb:
+    image: mariadb:latest
+    container_name: blog_mariadb
+    restart: always
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: blog_db
+      MYSQL_USER: jessica
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 123
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: blog_phpmyadmin
+    ports:
+      - "8805:80"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: jessica
+      PMA_PASSWORD: 1234
+
+volumes:
+  mariadb_data:
