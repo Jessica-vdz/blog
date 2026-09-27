@@ -6,10 +6,17 @@ export function News() {
     const [loading, setLoading] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost/blog/backend/newsLoad.php")
+        fetch("http://localhost/api/postsLoad.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                category: "news"
+
+            })
+        })
             .then(res => res.json())
             .then(data => {
-                setNews(data.slice(0, 4));
+                setNews(data);
                 setLoading(false);
             })
             .catch(err => {
@@ -17,6 +24,7 @@ export function News() {
                 setLoading(false);
             });
     })
+
     return (
         <main className="">
             <section className="header">
@@ -29,11 +37,11 @@ export function News() {
             <section className="main-content">
                 <h2 className="main-content-header">News Articles: </h2>
                 {news.map((item) => (
-                    <article className="main-content-card">
-                        <h2>{item.Title}</h2>
-                        <div key={item.News_ID} className="news-container">
-                            <p className="Description">{item.Description}</p>
-                            <Link to={`/news/${item.News_ID}`}>
+                    <article className="main-content-card"  key={item.newsId} >
+                        <h2>{item.title}</h2>
+                        <div className="news-container" >
+                            <p className="Description">{item.description}</p>
+                            <Link to={`/news/${item.newsId}`} >
                                 <button className="RmButton">Read More</button>
                             </Link>
                         </div>

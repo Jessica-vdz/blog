@@ -30,7 +30,7 @@ export function Register() {
         e.preventDefault();
         setLoading(true);
 
-        const response = await fetch("http://localhost/blog/backend/register.php", {
+        const response = await fetch("http://localhost/api/register.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password }),
@@ -120,7 +120,7 @@ export function Login() {
         setMessage("");
 
         try {
-            const response = await fetch("http://localhost/blog/backend/login.php", {
+            const response = await fetch("http://localhost/api/login.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -133,10 +133,10 @@ export function Login() {
                 setUser(data.user);
                 setMessage("Succesvol ingelogd!");
 
-                if (data.user.admin === 1) {
+                if (Number(data.user.admin) === 1) {
                     navigate("/admin");
 
-                } else if (data.user.role === 0) {
+                } else if (data.user.admin === 0) {
                     navigate("/home");
                 }
             } else {

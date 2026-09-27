@@ -3,7 +3,6 @@ import { Homepage } from './content/pages/homepage';
 import { useState } from 'react'
 import './App.css'
 import { Login, Register, RL } from './content/pages/Loginpage';
-import { Mailbot } from './content/components/mailbot';
 import { Admin } from './content/pages/admin';
 import { AdminRoute } from './content/components/adminRoute';
 import { News } from './content/pages/news';
@@ -21,7 +20,7 @@ function App() {
 
         <div className="Navigation">
           <nav className="Navigation-Links">
-            <Link to="/">Home</Link>
+            <Link to="">Home</Link>
             <Link to="news">News</Link>
             <Link to="books">Books</Link>
             <Link to="movie">Movie</Link>
@@ -30,7 +29,7 @@ function App() {
         </div>
 
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route path="" element={<Homepage />} />
           <Route path='news' element={<News />} />
           <Route path='/news/:id' element={<NewsPost/>}/>
           <Route path='books' element={<Books/>} />

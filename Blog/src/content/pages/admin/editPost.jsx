@@ -36,7 +36,7 @@ function NewsEdit() {
     const [id, setId] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost/blog/backend/newsLoad.php", {
+        fetch("http://localhost/api/postsLoad.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -62,8 +62,8 @@ function NewsEdit() {
                         Choose an Post
                     </option>
                     {news.map((item) => (
-                        <option key={item.News_ID} value={item.News_ID} className="form-edit__option">
-                            {item.Title}
+                        <option key={item.newsId} value={item.newsId} className="form-edit__option">
+                            {item.title}
                         </option>
                     ))}
                 </select>
@@ -76,7 +76,7 @@ function LoadNewsid({ newsId }) {
     const [news, setNews] = useState([]);
 
     useEffect(() => {
-        fetch(`http://localhost/blog/backend/loadIdPost.php?newsId=${newsId}`, {
+        fetch(`http://localhost/api/postsLoad.php?`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -105,17 +105,17 @@ function LoadNewsid({ newsId }) {
     }
 
     function handleUpdate(item) {
-        fetch("http://localhost/blog/backend/changePost.php", {
+        fetch("http://localhost/api/editPost.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 category: "news",
-                News_ID: item.News_ID,
-                title: item.Title,
-                description: item.Description,
-                text: item.Text
+                newsId: item.newsId,
+                title: item.title,
+                description: item.description,
+                text: item.text
             })
         })
             .then((res) => res.json())
@@ -128,14 +128,14 @@ function LoadNewsid({ newsId }) {
     }
 
     function handleDelete(item) {
-        fetch("http://localhost/blog/backend/deletePost.php", {
+        fetch("http://localhost/api/deletePost.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 category: "news",
-                News_ID: item.News_ID
+                newsId: item.newsId
             })
         })
             .then((res) => res.json())
@@ -150,17 +150,17 @@ function LoadNewsid({ newsId }) {
     return (
         <article className="form-editor">
             {news.map((item, index) => (
-                <article key={item.News_ID} className="form-editor__item">
+                <article key={item.newsId} className="form-editor__item">
                     <label className="form-editor___field">
                         <h3 className="form-editor__label">Title</h3>
                         <input
                             className="form-editor__input"
                             type="text"
-                            value={item.Title}
+                            value={item.title}
                             onChange={(e) =>
                                 handleChange(
                                     index,
-                                    "Title",
+                                    "title",
                                     e.target.value
                                 )
                             }
@@ -171,11 +171,11 @@ function LoadNewsid({ newsId }) {
                         <h3 className="form-editor__label">Description</h3>
                         <textarea
                             className="form_editor__textarea"
-                            value={item.Description}
+                            value={item.description}
                             onChange={(e) =>
                                 handleChange(
                                     index,
-                                    "Description",
+                                    "description",
                                     e.target.value
                                 )
                             }
@@ -186,11 +186,11 @@ function LoadNewsid({ newsId }) {
                         <h3 className="form-editor__label">Text</h3>
                         <textarea
                             className="form_editor__textarea"
-                            value={item.Text}
+                            value={item.text}
                             onChange={(e) =>
                                 handleChange(
                                     index,
-                                    "Text",
+                                    "text",
                                     e.target.value
                                 )
                             }

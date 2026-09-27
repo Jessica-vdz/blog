@@ -6,17 +6,23 @@ export function Books() {
     const [loading, setLoading] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost/blog/backend/booksLoad.php")
+        fetch("http://localhost/api/postsLoad.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                category: "bookReview"
+            })
+        })
             .then(res => res.json())
             .then(data => {
-                setBook(data.slice(0, 4));
+                setBook(data);
                 setLoading(false);
             })
             .catch(err => {
                 console.log(err);
                 setLoading(false);
             });
-    })
+    }, [])
     return (
         <main>
             <section className="header">
@@ -29,14 +35,14 @@ export function Books() {
             <section className="main-content">
                 <h2 className="main-content-header">Book Reviews: </h2>
                 {book.map((item) => (
-                    <article className="main-content-card">
+                    <article className="main-content-card" key={item.bookReviewId}>
                         <div>
-                            <h2>{item.Title}</h2>
-                            <h2>{item.Author}</h2>
+                            <h2>{item.title}</h2>
+                            <h2>{item.author}</h2>
                         </div>
-                        <div key={item.BookReview_ID}>
-                            <p className="Description">{item.Description}</p>
-                            <Link to={`/books/${item.BookReview_ID}`}>
+                        <div key={item.bookReviewId}>
+                            <p className="Description">{item.description}</p>
+                            <Link to={`/books/${item.bookReviewId}`}>
                                 <button className="RmButton">Read More</button>
                             </Link>
                         </div>

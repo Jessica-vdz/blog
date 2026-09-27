@@ -107,7 +107,7 @@ function NewsForm() {
 
         try {
             const response = await fetch(
-                "http://localhost/blog/backend/createPost.php",
+                "http://localhost/api/createPost.php",
                 {
                     method: "POST",
                     headers: {
@@ -188,7 +188,7 @@ function BookReview() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch("http://localhost/blog/backend/createPost.php", {
+        const response = await fetch("http://localhost/api/createPost.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -274,7 +274,7 @@ function MovieReview() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch("http://localhost/blog/backend/createPost.php", {
+        const response = await fetch("http://localhost/api/createPost.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

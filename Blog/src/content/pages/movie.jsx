@@ -7,7 +7,13 @@ export function Movie() {
     const [loading, setLoading] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost/blog/backend/movieLoad.php")
+        fetch("http://localhost/api/postsLoad.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                category: "movieReview"
+            })
+        })
             .then(res => res.json())
             .then(data => {
                 setMovie(data.slice(0, 4));
@@ -32,11 +38,11 @@ export function Movie() {
                 {movie.map((item) => (
                     <article className="main-content-card">
                         <div>
-                            <h2>{item.Title}</h2>
+                            <h2>{item.title}</h2>
                         </div>
-                        <div key={item.MovieReview_ID}>
-                            <p className="Description">{item.Description}</p>
-                            <Link to={`/movie/${item.MovieReview_ID}`}>
+                        <div key={item.movieReviewId}>
+                            <p className="Description">{item.description}</p>
+                            <Link to={`/movie/${item.movieReviewId}`}>
                                 <button className="RmButton">Read More</button>
                             </Link>
                         </div>

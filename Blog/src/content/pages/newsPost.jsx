@@ -9,7 +9,16 @@ export function NewsPost() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost/blog/backend/newsPost.php?id=${id}`)
+        fetch(`http://localhost/api/postsLoad.php`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                category: "news",
+                id: id
+            })
+        })
             .then(res => res.json())
             .then(data => {
                 setNews(data);
@@ -42,10 +51,10 @@ export function NewsPost() {
             <section className="main-content">
                 <article className="main-content-card">
                     <div className="main-content-card-header">
-                        <h2>{news.Title}</h2>
+                        <h2>{news.title}</h2>
                     </div>
                     <div>
-                        <p>{news.Text}</p>
+                        <p>{news.description}</p>
                     </div>
                 </article>
             </section>

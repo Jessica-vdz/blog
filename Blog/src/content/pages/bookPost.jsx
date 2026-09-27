@@ -8,7 +8,16 @@ export function BookPost() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost/blog/backend/bookPost.php?id=${id}`)
+        fetch(`http://localhost/api/postsLoad.php`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application.json"
+            },
+            body: JSON.stringify ({
+                category: "bookReview",
+                id: id
+            })
+        })
             .then(res => res.json())
             .then(data => {
                 setBook(data);
@@ -39,12 +48,12 @@ export function BookPost() {
             <section className="main-content">
                 <article className="main-content-card">
                     <div className="main-content-card-header">
-                        <h2>{book.Title}</h2>
-                        <h2>{book.Stars} / 5</h2>
+                        <h2>{book.title}</h2>
+                        <h2>{book.stars} / 5</h2>
                     </div>
                     <div>
-                    <p>{book.Review}</p>
-                    <h3>{book.Author}</h3>
+                    <p>{book.review}</p>
+                    <h3>{book.author}</h3>
                     </div>
                 </article>
             </section>

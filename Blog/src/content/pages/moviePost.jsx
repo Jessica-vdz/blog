@@ -8,7 +8,14 @@ export function MoviePost() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost/blog/backend/moviePost.php?id=${id}`)
+        fetch(`http://localhost/api/postsLoad.php`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                category: "movieReview",
+                id: id
+            })
+        })
             .then(res => res.json())
             .then(data => {
                 setMovie(data);
@@ -25,7 +32,7 @@ export function MoviePost() {
     }
 
     if (!movie) {
-        return <p>movie not found1</p>;
+        return <p>movie not found</p>;
     }
     return (
         <main>
@@ -39,11 +46,11 @@ export function MoviePost() {
             <section className="main-content">
                 <article className="main-content-card">
                     <div className="main-content-card-header">
-                        <h2>{movie.Title}</h2>
-                        <h2>{movie.Stars} / 5</h2>
+                        <h2>{movie.title}</h2>
+                        <h2>{movie.stars} / 5</h2>
                     </div>
                     <div>
-                        <p>{movie.Review}</p>
+                        <p>{movie.review}</p>
 
                     </div>
                 </article>
