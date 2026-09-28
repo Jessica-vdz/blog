@@ -33,69 +33,6 @@ export function CreatePost() {
     );
 }
 
-export function SendToLatest() {
-    const [message, setMessage] = useState("");
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-
-    const sendToLatest = async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await fetch(
-                "http://localhost/blog/backend/sendToLatest.php",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        title: title,
-                        description: description
-                    })
-                }
-            );
-
-            const data = await response.json();
-
-            if (data.success) {
-                setMessage("Sent to latest");
-            } else {
-                setMessage("something went wrong.." || data.message);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    return (
-        <article className="main-content-post">
-            <form onSubmit={sendToLatest}>
-                <h2>Send to Latest</h2>
-                <label className="main-content-input">
-                    <h3>Title</h3>
-                    <input
-                        className="formInput"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        type="text"
-                        required />
-                </label>
-                <label className="main-content-input">
-                    <h3>Description</h3>
-                    <input
-                        className="formInput"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required />
-                </label>
-                <button type="submit" className="loginButton">Send</button>
-            </form>
-        </article>
-
-    )
-}
-
 function NewsForm() {
     const [title, setTitle] = useState("");
     const [text, setText] = useState("");
@@ -107,7 +44,7 @@ function NewsForm() {
 
         try {
             const response = await fetch(
-                "http://localhost/api/createPost.php",
+                "/php/api/createPost.php",
                 {
                     method: "POST",
                     headers: {
@@ -188,7 +125,7 @@ function BookReview() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch("http://localhost/api/createPost.php", {
+        const response = await fetch("/php/api/createPost.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

@@ -7,7 +7,7 @@ export function Movie() {
     const [loading, setLoading] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost/api/postsLoad.php", {
+        fetch("/php/api/postsLoad.php", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({

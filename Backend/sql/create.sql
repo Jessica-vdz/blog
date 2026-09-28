@@ -3,7 +3,7 @@ CREATE TABLE user(
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    admin Boolean DEFAULT 1
+    admin Boolean DEFAULT 0
 );
 
 CREATE TABLE news(

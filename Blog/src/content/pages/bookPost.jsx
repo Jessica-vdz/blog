@@ -8,7 +8,7 @@ export function BookPost() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost/api/postsLoad.php`, {
+        fetch("/php/api/postsLoad.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application.json"

@@ -1,4 +1,4 @@
-import { CreatePost, SendToLatest } from "./admin/createPost"
+import { CreatePost } from "./admin/createPost"
 import { Navigate, useNavigate } from "react-router-dom"
 import '../../App'
 import { EditPost } from "./admin/editPost"
@@ -10,10 +10,7 @@ export function Admin() {
 
    return (
       <main>
-         <header className="header">
-            <h2>dit is mail</h2>
 
-         </header>
          <section className="main-content" id="post-container">
             <form>
                <label>

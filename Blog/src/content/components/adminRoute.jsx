@@ -10,7 +10,7 @@ export function AdminRoute({children}){
     const user = JSON.parse(storedUser);
 
     if (user.admin !== 1) {
-        return <Navigate to="/" replace />
+        return <Navigate to="/admin" replace />
     }
 
     return children;

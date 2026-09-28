@@ -6,14 +6,6 @@ import "./../../App.css";
 export function RL() {
     return (
         <main>
-            <section className="header">
-                <h1>Newsletter</h1>
-                <article className="header-info">
-                    <h2>About : </h2>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni atque unde quibusdam commodi, dolorem maiores, tempore iusto quos doloremque natus dolor hic tempora quidem rem. Fuga quas maiores sint assumenda.</p>
-                </article>
-            </section>
-            <Register />
             <Login />
         </main>
     )
@@ -30,7 +22,7 @@ export function Register() {
         e.preventDefault();
         setLoading(true);
 
-        const response = await fetch("http://localhost/api/register.php", {
+        const response = await fetch("/php/api/register.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password }),
@@ -120,7 +112,7 @@ export function Login() {
         setMessage("");
 
         try {
-            const response = await fetch("http://localhost/api/login.php", {
+            const response = await fetch("/php/api/login.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),

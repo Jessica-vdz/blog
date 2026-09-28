@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-const API = "http://localhost/api";
-
 export function EditPost() {
     const [category, setCategory] = useState("");
 
@@ -47,11 +45,6 @@ export function EditPost() {
     );
 }
 
-
-/* =========================================================
-   NEWS
-========================================================= */
-
 function NewsEdit() {
 
     const [news, setNews] = useState([]);
@@ -60,7 +53,7 @@ function NewsEdit() {
 
     useEffect(() => {
 
-        fetch(`${API}/postsLoad.php`, {
+        fetch("/php/api/postsLoad.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -174,55 +167,33 @@ function LoadNewsId({ newsId }) {
 
 
     function handleUpdate() {
-
-        fetch(`${API}/editPost.php`, {
-
+        fetch("php/api/editPost.php", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
-
                 category: "news",
-
                 newsId: news.newsId,
-
                 title: news.title,
-
                 description: news.description,
-
                 text: news.text
-
             })
-
         })
-
             .then((res) => res.json())
-
             .then((data) => {
-
                 console.log("News update:", data);
-
                 alert(data.message);
-
             })
-
             .catch((err) => {
-
                 console.error(
                     "News update error:",
                     err
                 );
-
             });
-
     }
 
-
     function handleDelete() {
-
         if (
             !window.confirm(
                 "Are you sure you want to delete this news?"
@@ -230,64 +201,39 @@ function LoadNewsId({ newsId }) {
         ) {
             return;
         }
-
-
-        fetch(`${API}/deletePost.php`, {
-
+        fetch("/php/api/deletePost.php", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
-
                 category: "news",
-
                 newsId: news.newsId
-
             })
-
         })
-
             .then((res) => res.json())
-
             .then((data) => {
-
                 console.log("News delete:", data);
-
                 alert(data.message);
-
                 if (data.success) {
                     setNews(null);
                 }
-
             })
-
             .catch((err) => {
-
                 console.error(
                     "News delete error:",
                     err
                 );
-
             });
-
     }
-
 
     if (!news) {
         return <p>Loading...</p>;
     }
-
-
     return (
         <article className="form-editor__item">
-
             <label>
-
                 <h3>Title</h3>
-
                 <input
                     type="text"
                     value={news.title || ""}
@@ -298,14 +244,9 @@ function LoadNewsId({ newsId }) {
                         )
                     }
                 />
-
             </label>
-
-
             <label>
-
                 <h3>Description</h3>
-
                 <textarea
                     value={news.description || ""}
                     onChange={(e) =>
@@ -315,14 +256,9 @@ function LoadNewsId({ newsId }) {
                         )
                     }
                 />
-
             </label>
-
-
             <label>
-
                 <h3>Text</h3>
-
                 <textarea
                     value={news.text || ""}
                     onChange={(e) =>
@@ -332,33 +268,22 @@ function LoadNewsId({ newsId }) {
                         )
                     }
                 />
-
             </label>
-
-
             <button
                 type="button"
                 onClick={handleUpdate}
             >
                 Change
             </button>
-
-
             <button
                 type="button"
                 onClick={handleDelete}
             >
                 Delete
             </button>
-
         </article>
     );
 }
-
-
-/* =========================================================
-   BOOK REVIEWS
-========================================================= */
 
 function BooksEdit() {
 
@@ -368,7 +293,7 @@ function BooksEdit() {
 
     useEffect(() => {
 
-        fetch(`${API}/postsLoad.php`, {
+        fetch("/php/api/postsLoad.php", {
 
             method: "POST",
 
@@ -413,27 +338,22 @@ function BooksEdit() {
 
     return (
         <article className="form-edit">
-
             <select
                 value={id}
                 onChange={(e) =>
                     setId(e.target.value)
                 }
             >
-
                 <option value="">
                     Choose a Post
                 </option>
-
                 {books.map((item) => (
-
                     <option
                         key={item.bookReviewId}
                         value={item.bookReviewId}
                     >
                         {item.title}
                     </option>
-
                 ))}
 
             </select>
@@ -516,61 +436,40 @@ function LoadBookId({ bookReviewId }) {
 
     function handleUpdate() {
 
-        fetch(`${API}/editPost.php`, {
-
+        fetch("/php/api/editPost.php", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
 
             body: JSON.stringify({
-
                 category: "bookReview",
-
                 bookReviewId: book.bookReviewId,
-
                 title: book.title,
-
                 author: book.author,
-
                 stars: Number(book.stars),
-
                 description: book.description,
-
                 review: book.review
-
             })
 
         })
-
             .then((res) => res.json())
-
             .then((data) => {
-
                 console.log(
                     "Book update:",
                     data
                 );
-
                 alert(data.message);
-
             })
-
             .catch((err) => {
-
                 console.error(
                     "Book update error:",
                     err
                 );
-
             });
-
     }
 
-
     function handleDelete() {
-
         if (
             !window.confirm(
                 "Are you sure you want to delete this book?"
@@ -580,50 +479,33 @@ function LoadBookId({ bookReviewId }) {
         }
 
 
-        fetch(`${API}/deletePost.php`, {
-
+        fetch("/php/api/deletePost.php", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
-
                 category: "bookReview",
-
                 bookReviewId: book.bookReviewId
-
             })
-
         })
-
             .then((res) => res.json())
-
             .then((data) => {
-
                 console.log(
                     "Book delete:",
                     data
                 );
-
                 alert(data.message);
-
                 if (data.success) {
                     setBook(null);
                 }
-
             })
-
             .catch((err) => {
-
                 console.error(
                     "Book delete error:",
                     err
                 );
-
             });
-
     }
 
 
@@ -631,14 +513,10 @@ function LoadBookId({ bookReviewId }) {
         return <p>Loading...</p>;
     }
 
-
     return (
         <article className="form-editor__item">
-
             <label>
-
                 <h3>Title</h3>
-
                 <input
                     type="text"
                     value={book.title || ""}
@@ -649,14 +527,9 @@ function LoadBookId({ bookReviewId }) {
                         )
                     }
                 />
-
             </label>
-
-
             <label>
-
                 <h3>Author</h3>
-
                 <input
                     type="text"
                     value={book.author || ""}
@@ -667,14 +540,9 @@ function LoadBookId({ bookReviewId }) {
                         )
                     }
                 />
-
             </label>
-
-
             <label>
-
                 <h3>Rating</h3>
-
                 <input
                     type="number"
                     min="0"
@@ -687,14 +555,9 @@ function LoadBookId({ bookReviewId }) {
                         )
                     }
                 />
-
             </label>
-
-
             <label>
-
                 <h3>Description</h3>
-
                 <textarea
                     value={book.description || ""}
                     onChange={(e) =>
@@ -704,14 +567,9 @@ function LoadBookId({ bookReviewId }) {
                         )
                     }
                 />
-
             </label>
-
-
             <label>
-
                 <h3>Review</h3>
-
                 <textarea
                     value={book.review || ""}
                     onChange={(e) =>
@@ -721,33 +579,22 @@ function LoadBookId({ bookReviewId }) {
                         )
                     }
                 />
-
             </label>
-
-
             <button
                 type="button"
                 onClick={handleUpdate}
             >
                 Change
             </button>
-
-
             <button
                 type="button"
                 onClick={handleDelete}
             >
                 Delete
             </button>
-
         </article>
     );
 }
-
-
-/* =========================================================
-   MOVIE REVIEWS
-========================================================= */
 
 function MovieEdit() {
 
@@ -757,65 +604,47 @@ function MovieEdit() {
 
     useEffect(() => {
 
-        fetch(`${API}/postsLoad.php`, {
-
+        fetch("/php/api/postsLoad.php", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
                 category: "movieReview"
             })
-
         })
-
             .then((res) => res.json())
-
             .then((data) => {
-
                 console.log(
                     "Movies list:",
                     data
                 );
-
                 setMovies(
                     Array.isArray(data)
                         ? data
                         : []
                 );
-
             })
-
             .catch((err) => {
-
                 console.error(
                     "Movies loading error:",
                     err
                 );
-
             });
-
     }, []);
-
 
     return (
         <article className="form-edit">
-
             <select
                 value={id}
                 onChange={(e) =>
                     setId(e.target.value)
                 }
             >
-
                 <option value="">
                     Choose a Post
                 </option>
-
                 {movies.map((item) => (
-
                     <option
                         key={item.movieReviewId}
                         value={item.movieReviewId}
@@ -824,20 +653,15 @@ function MovieEdit() {
                     </option>
 
                 ))}
-
             </select>
-
-
             {id && (
                 <LoadMovieId
                     movieReviewId={id}
                 />
             )}
-
         </article>
     );
 }
-
 
 function LoadMovieId({ movieReviewId }) {
 
@@ -846,52 +670,35 @@ function LoadMovieId({ movieReviewId }) {
 
     useEffect(() => {
 
-        fetch(`${API}/postsLoad.php`, {
-
+        fetch("/php/api/postsLoad.php", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
-
                 category: "movieReview",
-
                 movieReviewId: movieReviewId
-
             })
-
         })
-
             .then((res) => res.json())
-
             .then((data) => {
-
                 console.log(
                     "Selected movie:",
                     data
                 );
-
                 if (Array.isArray(data)) {
                     setMovie(data[0] || null);
                 } else {
                     setMovie(data);
                 }
-
             })
-
             .catch((err) => {
-
                 console.error(
                     "Movie loading error:",
                     err
                 );
-
             });
-
     }, [movieReviewId]);
-
 
     function handleChange(field, value) {
 
@@ -905,64 +712,44 @@ function LoadMovieId({ movieReviewId }) {
 
     function handleUpdate() {
 
-        fetch(`${API}/editPost.php`, {
-
+        fetch("php/api/editPost.php", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
-
                 category: "movieReview",
-
                 movieReviewId:
                     movie.movieReviewId,
-
                 title:
                     movie.title,
-
                 stars:
                     Number(movie.stars),
-
                 description:
                     movie.description,
-
                 review:
                     movie.review
 
             })
 
         })
-
             .then((res) => res.json())
-
             .then((data) => {
-
                 console.log(
                     "Movie update:",
                     data
                 );
-
                 alert(data.message);
-
             })
-
             .catch((err) => {
-
                 console.error(
                     "Movie update error:",
                     err
                 );
-
             });
-
     }
 
-
     function handleDelete() {
-
         if (
             !window.confirm(
                 "Are you sure you want to delete this movie?"
@@ -971,55 +758,35 @@ function LoadMovieId({ movieReviewId }) {
             return;
         }
 
-
-        fetch(`${API}/deletePost.php`, {
-
+        fetch("/php/api/deletePost.php", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
-
                 category: "movieReview",
-
                 movieReviewId:
                     movie.movieReviewId
-
             })
-
         })
-
             .then((res) => res.json())
-
             .then((data) => {
-
                 console.log(
                     "Movie delete:",
                     data
                 );
-
                 alert(data.message);
-
                 if (data.success) {
                     setMovie(null);
                 }
-
             })
-
             .catch((err) => {
-
                 console.error(
                     "Movie delete error:",
                     err
                 );
-
             });
-
     }
-
-
     if (!movie) {
         return <p>Loading...</p>;
     }
@@ -1027,11 +794,8 @@ function LoadMovieId({ movieReviewId }) {
 
     return (
         <article className="form-editor__item">
-
             <label>
-
                 <h3>Title</h3>
-
                 <input
                     type="text"
                     value={movie.title || ""}
@@ -1040,16 +804,10 @@ function LoadMovieId({ movieReviewId }) {
                             "title",
                             e.target.value
                         )
-                    }
-                />
-
+                    } />
             </label>
-
-
             <label>
-
                 <h3>Rating</h3>
-
                 <input
                     type="number"
                     min="0"
@@ -1060,16 +818,10 @@ function LoadMovieId({ movieReviewId }) {
                             "stars",
                             e.target.value
                         )
-                    }
-                />
-
+                    } />
             </label>
-
-
             <label>
-
                 <h3>Description</h3>
-
                 <textarea
                     value={movie.description || ""}
                     onChange={(e) =>
@@ -1081,12 +833,8 @@ function LoadMovieId({ movieReviewId }) {
                 />
 
             </label>
-
-
             <label>
-
                 <h3>Review</h3>
-
                 <textarea
                     value={movie.review || ""}
                     onChange={(e) =>
@@ -1094,27 +842,14 @@ function LoadMovieId({ movieReviewId }) {
                             "review",
                             e.target.value
                         )
-                    }
-                />
-
+                    } />
             </label>
-
-
-            <button
-                type="button"
-                onClick={handleUpdate}
-            >
+            <button type="button" onClick={handleUpdate}>
                 Change
             </button>
-
-
-            <button
-                type="button"
-                onClick={handleDelete}
-            >
+            <button type="button" onClick={handleDelete}>
                 Delete
             </button>
-
         </article>
     );
 }

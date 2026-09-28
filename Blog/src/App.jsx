@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { Homepage } from './content/pages/homepage';
 import { useState } from 'react'
 import './App.css'
-import { Login, Register, RL } from './content/pages/Loginpage';
+import { RL } from './content/pages/Loginpage';
 import { Admin } from './content/pages/admin';
 import { AdminRoute } from './content/components/adminRoute';
 import { News } from './content/pages/news';
@@ -18,7 +17,7 @@ function App() {
     <>
       <BrowserRouter>
           <nav className="navigation">
-            <Link to="" className='navItem'>
+            <Link to="/home" className='navItem'>
               <h4>Home</h4>
             </Link>
             <Link to="books" className='navItem'>
@@ -34,13 +33,14 @@ function App() {
           </nav>
 
         <Routes>
-          <Route path='' element={<News />} />
+          <Route path='home' element={<News />} />
           <Route path='/news/:id' element={<NewsPost />} />
           <Route path='books' element={<Books />} />
           <Route path='/books/:id' element={<BookPost />} />
           <Route path='movie' element={<Movie />} />
           <Route path='/movie/:id' element={<MoviePost />} />
-          <Route path="/register" element={<RL />} />
+          <Route path="register" element={<RL />} />
+          <Route path='adminPage' element={<Admin/>}></Route>
           <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
         </Routes>
 
