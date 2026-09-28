@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react"
-import { data } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export function EditPost() {
     const [category, setCategory] = useState("");
@@ -8,7 +7,11 @@ export function EditPost() {
         <article className="edit-post">
             <form className="edit-post__category-form">
                 <label className="edit-post__category-label">
-                    <select value={category} onChange={(e) => setCategory((e).target.value)} className="edit-post__category-select">
+                    <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="edit-post__category-select"
+                    >
                         <option value="">Choose an option</option>
                         <option value="news">News</option>
                         <option value="bookReview">Book Review</option>
@@ -17,19 +20,17 @@ export function EditPost() {
                 </label>
             </form>
 
-            {category === "news" && (
-                <NewsEdit />
-            )}
-
-            {category === "bookReview" && (
-                <BooksEdit />
-            )}
-            {category === "movieReview" && (
-                <MovieEdit />
-            )}
+            {category === "news" && <NewsEdit />}
+            {category === "bookReview" && <BooksEdit />}
+            {category === "movieReview" && <MovieEdit />}
         </article>
     );
 }
+
+
+/* =========================================================
+   NEWS
+========================================================= */
 
 function NewsEdit() {
     const [news, setNews] = useState([]);
@@ -47,64 +48,79 @@ function NewsEdit() {
         })
             .then((res) => res.json())
             .then((data) => {
-                setNews(data);
+                console.log("News list:", data);
+                setNews(Array.isArray(data) ? data : []);
             })
             .catch((err) => {
                 console.log(err);
-            })
+            });
     }, []);
 
     return (
         <article className="form-edit">
             <form className="form-edit__select-form">
-                <select value={id} onChange={(e) => setId((e).target.value)}>
-                    <option>
-                        Choose an Post
-                    </option>
+                <select
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
+                >
+                    <option value="">Choose a Post</option>
+
                     {news.map((item) => (
-                        <option key={item.newsId} value={item.newsId} className="form-edit__option">
+                        <option
+                            key={item.newsId}
+                            value={item.newsId}
+                            className="form-edit__option"
+                        >
                             {item.title}
                         </option>
                     ))}
                 </select>
             </form>
-            {id && <LoadNewsid newsId={id} />}
+
+            {id && <LoadNewsId newsId={id} />}
         </article>
-    )
+    );
 }
-function LoadNewsid({ newsId }) {
-    const [news, setNews] = useState([]);
+
+
+function LoadNewsId({ newsId }) {
+    const [news, setNews] = useState(null);
 
     useEffect(() => {
-        fetch(`http://localhost/api/postsLoad.php?`, {
+        fetch("http://localhost/api/postsLoad.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                category: "news"
+                category: "news",
+                newsId: newsId
             })
         })
             .then((res) => res.json())
             .then((data) => {
-                setNews(data);
+                console.log("Selected news:", data);
+
+                // Als PHP een array teruggeeft met één item
+                if (Array.isArray(data)) {
+                    setNews(data[0] || null);
+                } else {
+                    setNews(data);
+                }
             })
             .catch((err) => {
                 console.log(err);
             });
     }, [newsId]);
 
-    function handleChange(index, field, value) {
-        const updated = [...news];
-        updated[index] = {
-            ...updated[index],
+    function handleChange(field, value) {
+        setNews((previous) => ({
+            ...previous,
             [field]: value
-        };
-
-        setNews(updated);
+        }));
     }
 
-    function handleUpdate(item) {
+    function handleUpdate() {
         fetch("http://localhost/api/editPost.php", {
             method: "POST",
             headers: {
@@ -112,22 +128,22 @@ function LoadNewsid({ newsId }) {
             },
             body: JSON.stringify({
                 category: "news",
-                newsId: item.newsId,
-                title: item.title,
-                description: item.description,
-                text: item.text
+                newsId: news.newsId,
+                title: news.title,
+                description: news.description,
+                text: news.text
             })
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("updated", data);
+                console.log("Updated:", data);
             })
             .catch((err) => {
                 console.log(err);
             });
     }
 
-    function handleDelete(item) {
+    function handleDelete() {
         fetch("http://localhost/api/deletePost.php", {
             method: "POST",
             headers: {
@@ -135,93 +151,92 @@ function LoadNewsid({ newsId }) {
             },
             body: JSON.stringify({
                 category: "news",
-                newsId: item.newsId
+                newsId: news.newsId
             })
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("Deleted", data);
+                console.log("Deleted:", data);
+                setNews(null);
             })
             .catch((err) => {
                 console.log(err);
             });
     }
 
+    if (!news) {
+        return <p>Loading...</p>;
+    }
+
     return (
-        <article className="form-editor">
-            {news.map((item, index) => (
-                <article key={item.newsId} className="form-editor__item">
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Title</h3>
-                        <input
-                            className="form-editor__input"
-                            type="text"
-                            value={item.title}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "title",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
+        <article className="form-editor__item">
 
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Description</h3>
-                        <textarea
-                            className="form_editor__textarea"
-                            value={item.description}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "description",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Title</h3>
 
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Text</h3>
-                        <textarea
-                            className="form_editor__textarea"
-                            value={item.text}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "text",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
+                <input
+                    className="form-editor__input"
+                    type="text"
+                    value={news.title || ""}
+                    onChange={(e) =>
+                        handleChange("title", e.target.value)
+                    }
+                />
+            </label>
 
-                    <label>
-                        <button
-                            className="form-editor__button"
-                            type="button"
-                            onClick={() => handleUpdate(item)}
-                        >
-                            Change
-                        </button>
-                        <button
-                            className="form-editor__button"
-                            type="button"
-                            onClick={() => handleDelete(item)}>
-                            Delete
-                        </button>
-                    </label>
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">
+                    Description
+                </h3>
 
-                </article>
-            ))}
+                <textarea
+                    className="form_editor__textarea"
+                    value={news.description || ""}
+                    onChange={(e) =>
+                        handleChange("description", e.target.value)
+                    }
+                />
+            </label>
+
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Text</h3>
+
+                <textarea
+                    className="form_editor__textarea"
+                    value={news.text || ""}
+                    onChange={(e) =>
+                        handleChange("text", e.target.value)
+                    }
+                />
+            </label>
+
+            <button
+                className="form-editor__button"
+                type="button"
+                onClick={handleUpdate}
+            >
+                Change
+            </button>
+
+            <button
+                className="form-editor__button"
+                type="button"
+                onClick={handleDelete}
+            >
+                Delete
+            </button>
+
         </article>
     );
 }
-//
+
+
+/* =========================================================
+   BOOKS
+========================================================= */
 
 function BooksEdit() {
-    const [book, setBook] = useState([]);
+    const [books, setBooks] = useState([]);
     const [id, setId] = useState("");
 
     useEffect(() => {
@@ -236,85 +251,80 @@ function BooksEdit() {
         })
             .then((res) => res.json())
             .then((data) => {
-                setBook(data);
+                console.log("Books list:", data);
+                setBooks(Array.isArray(data) ? data : []);
             })
             .catch((err) => {
                 console.log(err);
-            })
+            });
     }, []);
 
     return (
         <article className="form-edit">
             <form className="form-edit__select-form">
-                <select value={id} onChange={(e) => setId((e).target.value)}>
-                    <option>
-                        Choose an Post
-                    </option>
-                    {book.map((item) => (
-                        <option key={item.BookReview_ID} value={item.BookReview_ID} className="form-edit__option">
+                <select
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
+                >
+                    <option value="">Choose a Post</option>
+
+                    {books.map((item) => (
+                        <option
+                            key={item.BookReview_ID}
+                            value={item.BookReview_ID}
+                            className="form-edit__option"
+                        >
                             {item.Title}
                         </option>
                     ))}
                 </select>
             </form>
+
             {id && <LoadBookId bookId={id} />}
         </article>
-    )
+    );
 }
+
+
 function LoadBookId({ bookId }) {
-    const [book, setBook] = useState([]);
+    const [book, setBook] = useState(null);
 
     useEffect(() => {
-        fetch(`http://localhost/blog/backend/loadIdPost.php?bookId=${bookId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                category: "bookReview"
-            })
-        })
+        fetch(
+            `http://localhost/blog/backend/loadIdPost.php?bookId=${bookId}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    category: "bookReview"
+                })
+            }
+        )
             .then((res) => res.json())
             .then((data) => {
-                setBook(data);
+                console.log("Selected book:", data);
+
+                if (Array.isArray(data)) {
+                    setBook(data[0] || null);
+                } else {
+                    setBook(data);
+                }
             })
             .catch((err) => {
                 console.log(err);
             });
     }, [bookId]);
 
-    function handleChange(index, field, value) {
-        const updated = [...book];
-        updated[index] = {
-            ...updated[index],
+    function handleChange(field, value) {
+        setBook((previous) => ({
+            ...previous,
             [field]: value
-        };
-
-        setBook(updated);
+        }));
     }
 
-    function handleDelete(item) {
-        fetch("http://localhost/blog/backend/deletePost.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                category: "bookReview",
-                BookReview_ID: item.BookReview_ID
-            })
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("Deleted", data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-
-    function handleUpdate(item) {
+    function handleUpdate() {
         fetch("http://localhost/blog/backend/changePost.php", {
             method: "POST",
             headers: {
@@ -322,123 +332,145 @@ function LoadBookId({ bookId }) {
             },
             body: JSON.stringify({
                 category: "bookReview",
-                BookReview_ID: item.BookReview_ID,
-                title: item.Title,
-                author: item.Author,
-                stars: item.Stars,
-                description: item.Description,
-                review: item.Review
+                BookReview_ID: book.BookReview_ID,
+                title: book.Title,
+                author: book.Author,
+                stars: book.Stars,
+                description: book.Description,
+                review: book.Review
             })
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("updated", data);
+                console.log("Updated:", data);
             })
             .catch((err) => {
                 console.log(err);
             });
     }
 
+    function handleDelete() {
+        fetch("http://localhost/blog/backend/deletePost.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                category: "bookReview",
+                BookReview_ID: book.BookReview_ID
+            })
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("Deleted:", data);
+                setBook(null);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    if (!book) {
+        return <p>Loading...</p>;
+    }
+
     return (
-        <article>
-            {book.map((item, index) => (
-                <article key={item.BookReview_ID} className="form-editor__item">
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Title</h3>
-                        <input
-                            className="form-editor__input"
-                            type="text"
-                            value={item.Title}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Title",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Author</h3>
-                        <input type="text"
-                            className="form-editor__input"
-                            value={item.Author}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Author",
-                                    e.target.value
-                                )
-                            }
-                        />
+        <article className="form-editor__item">
 
-                    </label>
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Rating</h3>
-                        <input type="number" max="5"
-                            className="form-editor__input"
-                            value={item.Stars}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Stars",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Description</h3>
-                        <textarea
-                            className="form_editor__textarea"
-                            value={item.Description}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Description",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Text</h3>
-                        <textarea
-                            className="form_editor__textarea"
-                            value={item.Review}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Review",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
-                    <label>
-                        <button
-                            className="form-editor__button"
-                            type="button"
-                            onClick={() => handleUpdate(item)}
-                        >
-                            Change
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => handleDelete(item)}
-                            className="form-editor__button"
-                        > Delete</button>
-                    </label>
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Title</h3>
 
-                </article>
-            ))}
+                <input
+                    className="form-editor__input"
+                    type="text"
+                    value={book.Title || ""}
+                    onChange={(e) =>
+                        handleChange("Title", e.target.value)
+                    }
+                />
+            </label>
+
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Author</h3>
+
+                <input
+                    className="form-editor__input"
+                    type="text"
+                    value={book.Author || ""}
+                    onChange={(e) =>
+                        handleChange("Author", e.target.value)
+                    }
+                />
+            </label>
+
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Rating</h3>
+
+                <input
+                    className="form-editor__input"
+                    type="number"
+                    min="0"
+                    max="5"
+                    value={book.Stars || ""}
+                    onChange={(e) =>
+                        handleChange("Stars", e.target.value)
+                    }
+                />
+            </label>
+
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">
+                    Description
+                </h3>
+
+                <textarea
+                    className="form_editor__textarea"
+                    value={book.Description || ""}
+                    onChange={(e) =>
+                        handleChange("Description", e.target.value)
+                    }
+                />
+            </label>
+
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Review</h3>
+
+                <textarea
+                    className="form_editor__textarea"
+                    value={book.Review || ""}
+                    onChange={(e) =>
+                        handleChange("Review", e.target.value)
+                    }
+                />
+            </label>
+
+            <button
+                className="form-editor__button"
+                type="button"
+                onClick={handleUpdate}
+            >
+                Change
+            </button>
+
+            <button
+                className="form-editor__button"
+                type="button"
+                onClick={handleDelete}
+            >
+                Delete
+            </button>
+
         </article>
     );
 }
-//
+
+
+/* =========================================================
+   MOVIES
+========================================================= */
 
 function MovieEdit() {
-    const [movie, setMovie] = useState([]);
+    const [movies, setMovies] = useState([]);
     const [id, setId] = useState("");
 
     useEffect(() => {
@@ -453,64 +485,80 @@ function MovieEdit() {
         })
             .then((res) => res.json())
             .then((data) => {
-                setMovie(data);
+                console.log("Movies list:", data);
+                setMovies(Array.isArray(data) ? data : []);
             })
             .catch((err) => {
                 console.log(err);
-            })
+            });
     }, []);
 
     return (
         <article className="form-edit">
             <form className="form-edit__select-form">
-                <select value={id} onChange={(e) => setId((e).target.value)}>
-                    <option>
-                        Choose an Post
-                    </option>
-                    {movie.map((item) => (
-                        <option key={item.MovieReview_ID} value={item.MovieReview_ID} className="form-edit__option">
+                <select
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
+                >
+                    <option value="">Choose a Post</option>
+
+                    {movies.map((item) => (
+                        <option
+                            key={item.MovieReview_ID}
+                            value={item.MovieReview_ID}
+                            className="form-edit__option"
+                        >
                             {item.Title}
                         </option>
                     ))}
                 </select>
             </form>
+
             {id && <LoadMovieId movieId={id} />}
         </article>
-    )
+    );
 }
+
+
 function LoadMovieId({ movieId }) {
-    const [movie, setMovie] = useState([]);
+    const [movie, setMovie] = useState(null);
 
     useEffect(() => {
-        fetch(`http://localhost/blog/backend/loadIdPost.php?movieId=${movieId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                category: "movieReview"
-            })
-        })
+        fetch(
+            `http://localhost/blog/backend/loadIdPost.php?movieId=${movieId}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    category: "movieReview"
+                })
+            }
+        )
             .then((res) => res.json())
             .then((data) => {
-                setMovie(data);
+                console.log("Selected movie:", data);
+
+                if (Array.isArray(data)) {
+                    setMovie(data[0] || null);
+                } else {
+                    setMovie(data);
+                }
             })
             .catch((err) => {
                 console.log(err);
             });
     }, [movieId]);
 
-    function handleChange(index, field, value) {
-        const updated = [...movie];
-        updated[index] = {
-            ...updated[index],
+    function handleChange(field, value) {
+        setMovie((previous) => ({
+            ...previous,
             [field]: value
-        };
-
-        setMovie(updated);
+        }));
     }
 
-    function handleUpdate(item) {
+    function handleUpdate() {
         fetch("http://localhost/blog/backend/changePost.php", {
             method: "POST",
             headers: {
@@ -518,22 +566,23 @@ function LoadMovieId({ movieId }) {
             },
             body: JSON.stringify({
                 category: "movieReview",
-                MovieReview_ID: item.MovieReview_ID,
-                title: item.Title,
-                stars: item.Stars,
-                description: item.Description,
-                review: item.Review
+                MovieReview_ID: movie.MovieReview_ID,
+                title: movie.Title,
+                stars: movie.Stars,
+                description: movie.Description,
+                review: movie.Review
             })
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("updated", data);
+                console.log("Updated:", data);
             })
             .catch((err) => {
                 console.log(err);
             });
     }
-    function handleDelete(item) {
+
+    function handleDelete() {
         fetch("http://localhost/blog/backend/deletePost.php", {
             method: "POST",
             headers: {
@@ -541,98 +590,96 @@ function LoadMovieId({ movieId }) {
             },
             body: JSON.stringify({
                 category: "movieReview",
-                MovieReview_ID: item.MovieReview_ID
+                MovieReview_ID: movie.MovieReview_ID
             })
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("Deleted", data);
+                console.log("Deleted:", data);
+                setMovie(null);
             })
             .catch((err) => {
                 console.log(err);
             });
     }
 
+    if (!movie) {
+        return <p>Loading...</p>;
+    }
+
     return (
-        <article className="form-editor">
-            {movie.map((item, index) => (
-                <article key={item.MovieReview_ID} className="form-editor__item">
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Title</h3>
-                        <input
-                            className="form-editor__input"
+        <article className="form-editor__item">
 
-                            type="text"
-                            value={item.Title}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Title",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Title</h3>
 
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Rating</h3>
-                        <input type="number" max="5"
-                            className="form-editor__input"
-                            value={item.Stars}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Stars",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Description</h3>
-                        <textarea
-                            className="form_editor__textarea"
-                            value={item.Description}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Description",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
+                <input
+                    className="form-editor__input"
+                    type="text"
+                    value={movie.Title || ""}
+                    onChange={(e) =>
+                        handleChange("Title", e.target.value)
+                    }
+                />
+            </label>
 
-                    <label className="form-editor___field">
-                        <h3 className="form-editor__label">Text</h3>
-                        <textarea
-                            className="form_editor__textarea"
-                            value={item.Review}
-                            onChange={(e) =>
-                                handleChange(
-                                    index,
-                                    "Review",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </label>
-                    <label>
-                        <button
-                            className="form-editor__button"
-                            type="button"
-                            onClick={() => handleUpdate(item)}
-                        >
-                            Change
-                        </button>
-                        <button
-                            className="form-editor__button"
-                            onClick={() => handleDelete(item)}>
-                            Delete
-                        </button>
-                    </label>
-                </article>
-            ))}
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Rating</h3>
+
+                <input
+                    className="form-editor__input"
+                    type="number"
+                    min="0"
+                    max="5"
+                    value={movie.Stars || ""}
+                    onChange={(e) =>
+                        handleChange("Stars", e.target.value)
+                    }
+                />
+            </label>
+
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">
+                    Description
+                </h3>
+
+                <textarea
+                    className="form_editor__textarea"
+                    value={movie.Description || ""}
+                    onChange={(e) =>
+                        handleChange("Description", e.target.value)
+                    }
+                />
+            </label>
+
+            <label className="form-editor___field">
+                <h3 className="form-editor__label">Review</h3>
+
+                <textarea
+                    className="form_editor__textarea"
+                    value={movie.Review || ""}
+                    onChange={(e) =>
+                        handleChange("Review", e.target.value)
+                    }
+                />
+            </label>
+
+            <button
+                className="form-editor__button"
+                type="button"
+                onClick={handleUpdate}
+            >
+                Change
+            </button>
+
+            <button
+                className="form-editor__button"
+                type="button"
+                onClick={handleDelete}
+            >
+                Delete
+            </button>
+
         </article>
     );
 }
