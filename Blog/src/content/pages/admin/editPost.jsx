@@ -1,28 +1,48 @@
 import { useEffect, useState } from "react";
 
+const API = "http://localhost/api";
+
 export function EditPost() {
     const [category, setCategory] = useState("");
 
     return (
         <article className="edit-post">
+
             <form className="edit-post__category-form">
                 <label className="edit-post__category-label">
+
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                         className="edit-post__category-select"
                     >
-                        <option value="">Choose an option</option>
-                        <option value="news">News</option>
-                        <option value="bookReview">Book Review</option>
-                        <option value="movieReview">Movie Review</option>
+                        <option value="">
+                            Choose an option
+                        </option>
+
+                        <option value="news">
+                            News
+                        </option>
+
+                        <option value="bookReview">
+                            Book Review
+                        </option>
+
+                        <option value="movieReview">
+                            Movie Review
+                        </option>
                     </select>
+
                 </label>
             </form>
 
+
             {category === "news" && <NewsEdit />}
+
             {category === "bookReview" && <BooksEdit />}
+
             {category === "movieReview" && <MovieEdit />}
+
         </article>
     );
 }
@@ -33,11 +53,14 @@ export function EditPost() {
 ========================================================= */
 
 function NewsEdit() {
+
     const [news, setNews] = useState([]);
     const [id, setId] = useState("");
 
+
     useEffect(() => {
-        fetch("http://localhost/api/postsLoad.php", {
+
+        fetch(`${API}/postsLoad.php`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -46,48 +69,69 @@ function NewsEdit() {
                 category: "news"
             })
         })
+
             .then((res) => res.json())
+
             .then((data) => {
                 console.log("News list:", data);
-                setNews(Array.isArray(data) ? data : []);
+
+                setNews(
+                    Array.isArray(data)
+                        ? data
+                        : []
+                );
             })
+
             .catch((err) => {
-                console.log(err);
+                console.error("News loading error:", err);
             });
+
     }, []);
+
 
     return (
         <article className="form-edit">
-            <form className="form-edit__select-form">
-                <select
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                >
-                    <option value="">Choose a Post</option>
 
-                    {news.map((item) => (
-                        <option
-                            key={item.newsId}
-                            value={item.newsId}
-                            className="form-edit__option"
-                        >
-                            {item.title}
-                        </option>
-                    ))}
-                </select>
-            </form>
+            <select
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+            >
 
-            {id && <LoadNewsId newsId={id} />}
+                <option value="">
+                    Choose a Post
+                </option>
+
+                {news.map((item) => (
+
+                    <option
+                        key={item.newsId}
+                        value={item.newsId}
+                    >
+                        {item.title}
+                    </option>
+
+                ))}
+
+            </select>
+
+
+            {id && (
+                <LoadNewsId newsId={id} />
+            )}
+
         </article>
     );
 }
 
 
 function LoadNewsId({ newsId }) {
+
     const [news, setNews] = useState(null);
 
+
     useEffect(() => {
-        fetch("http://localhost/api/postsLoad.php", {
+
+        fetch(`${API}/postsLoad.php`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -97,129 +141,210 @@ function LoadNewsId({ newsId }) {
                 newsId: newsId
             })
         })
+
             .then((res) => res.json())
+
             .then((data) => {
+
                 console.log("Selected news:", data);
 
-                // Als PHP een array teruggeeft met één item
                 if (Array.isArray(data)) {
                     setNews(data[0] || null);
                 } else {
                     setNews(data);
                 }
+
             })
+
             .catch((err) => {
-                console.log(err);
+                console.error("News error:", err);
             });
+
     }, [newsId]);
 
+
     function handleChange(field, value) {
+
         setNews((previous) => ({
             ...previous,
             [field]: value
         }));
+
     }
+
 
     function handleUpdate() {
-        fetch("http://localhost/api/editPost.php", {
+
+        fetch(`${API}/editPost.php`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
+
                 category: "news",
+
                 newsId: news.newsId,
+
                 title: news.title,
+
                 description: news.description,
+
                 text: news.text
+
             })
+
         })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Updated:", data);
+
+                console.log("News update:", data);
+
+                alert(data.message);
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "News update error:",
+                    err
+                );
+
             });
+
     }
 
+
     function handleDelete() {
-        fetch("http://localhost/api/deletePost.php", {
+
+        if (
+            !window.confirm(
+                "Are you sure you want to delete this news?"
+            )
+        ) {
+            return;
+        }
+
+
+        fetch(`${API}/deletePost.php`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
+
                 category: "news",
+
                 newsId: news.newsId
+
             })
+
         })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Deleted:", data);
-                setNews(null);
+
+                console.log("News delete:", data);
+
+                alert(data.message);
+
+                if (data.success) {
+                    setNews(null);
+                }
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "News delete error:",
+                    err
+                );
+
             });
+
     }
+
 
     if (!news) {
         return <p>Loading...</p>;
     }
 
+
     return (
         <article className="form-editor__item">
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Title</h3>
+            <label>
+
+                <h3>Title</h3>
 
                 <input
-                    className="form-editor__input"
                     type="text"
                     value={news.title || ""}
                     onChange={(e) =>
-                        handleChange("title", e.target.value)
+                        handleChange(
+                            "title",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">
-                    Description
-                </h3>
+
+            <label>
+
+                <h3>Description</h3>
 
                 <textarea
-                    className="form_editor__textarea"
                     value={news.description || ""}
                     onChange={(e) =>
-                        handleChange("description", e.target.value)
+                        handleChange(
+                            "description",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Text</h3>
+
+            <label>
+
+                <h3>Text</h3>
 
                 <textarea
-                    className="form_editor__textarea"
                     value={news.text || ""}
                     onChange={(e) =>
-                        handleChange("text", e.target.value)
+                        handleChange(
+                            "text",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
+
             <button
-                className="form-editor__button"
                 type="button"
                 onClick={handleUpdate}
             >
                 Change
             </button>
 
+
             <button
-                className="form-editor__button"
                 type="button"
                 onClick={handleDelete}
             >
@@ -232,228 +357,383 @@ function LoadNewsId({ newsId }) {
 
 
 /* =========================================================
-   BOOKS
+   BOOK REVIEWS
 ========================================================= */
 
 function BooksEdit() {
+
     const [books, setBooks] = useState([]);
     const [id, setId] = useState("");
 
+
     useEffect(() => {
-        fetch("http://localhost/blog/backend/booksLoad.php", {
+
+        fetch(`${API}/postsLoad.php`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 category: "bookReview"
             })
+
         })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Books list:", data);
-                setBooks(Array.isArray(data) ? data : []);
+
+                console.log(
+                    "Books list:",
+                    data
+                );
+
+                setBooks(
+                    Array.isArray(data)
+                        ? data
+                        : []
+                );
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "Books loading error:",
+                    err
+                );
+
             });
+
     }, []);
+
 
     return (
         <article className="form-edit">
-            <form className="form-edit__select-form">
-                <select
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                >
-                    <option value="">Choose a Post</option>
 
-                    {books.map((item) => (
-                        <option
-                            key={item.BookReview_ID}
-                            value={item.BookReview_ID}
-                            className="form-edit__option"
-                        >
-                            {item.Title}
-                        </option>
-                    ))}
-                </select>
-            </form>
+            <select
+                value={id}
+                onChange={(e) =>
+                    setId(e.target.value)
+                }
+            >
 
-            {id && <LoadBookId bookId={id} />}
+                <option value="">
+                    Choose a Post
+                </option>
+
+                {books.map((item) => (
+
+                    <option
+                        key={item.bookReviewId}
+                        value={item.bookReviewId}
+                    >
+                        {item.title}
+                    </option>
+
+                ))}
+
+            </select>
+
+
+            {id && (
+                <LoadBookId
+                    bookReviewId={id}
+                />
+            )}
+
         </article>
     );
 }
 
 
-function LoadBookId({ bookId }) {
+function LoadBookId({ bookReviewId }) {
+
     const [book, setBook] = useState(null);
 
+
     useEffect(() => {
-        fetch(
-            `http://localhost/blog/backend/loadIdPost.php?bookId=${bookId}`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    category: "bookReview"
-                })
-            }
-        )
+
+        fetch(`${API}/postsLoad.php`, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                category: "bookReview",
+
+                bookReviewId: bookReviewId
+
+            })
+
+        })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Selected book:", data);
+
+                console.log(
+                    "Selected book:",
+                    data
+                );
 
                 if (Array.isArray(data)) {
                     setBook(data[0] || null);
                 } else {
                     setBook(data);
                 }
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "Book loading error:",
+                    err
+                );
+
             });
-    }, [bookId]);
+
+    }, [bookReviewId]);
+
 
     function handleChange(field, value) {
+
         setBook((previous) => ({
             ...previous,
             [field]: value
         }));
+
     }
+
 
     function handleUpdate() {
-        fetch("http://localhost/blog/backend/changePost.php", {
+
+        fetch(`${API}/editPost.php`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
+
                 category: "bookReview",
-                BookReview_ID: book.BookReview_ID,
-                title: book.Title,
-                author: book.Author,
-                stars: book.Stars,
-                description: book.Description,
-                review: book.Review
+
+                bookReviewId: book.bookReviewId,
+
+                title: book.title,
+
+                author: book.author,
+
+                stars: Number(book.stars),
+
+                description: book.description,
+
+                review: book.review
+
             })
+
         })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Updated:", data);
+
+                console.log(
+                    "Book update:",
+                    data
+                );
+
+                alert(data.message);
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "Book update error:",
+                    err
+                );
+
             });
+
     }
 
+
     function handleDelete() {
-        fetch("http://localhost/blog/backend/deletePost.php", {
+
+        if (
+            !window.confirm(
+                "Are you sure you want to delete this book?"
+            )
+        ) {
+            return;
+        }
+
+
+        fetch(`${API}/deletePost.php`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
+
                 category: "bookReview",
-                BookReview_ID: book.BookReview_ID
+
+                bookReviewId: book.bookReviewId
+
             })
+
         })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Deleted:", data);
-                setBook(null);
+
+                console.log(
+                    "Book delete:",
+                    data
+                );
+
+                alert(data.message);
+
+                if (data.success) {
+                    setBook(null);
+                }
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "Book delete error:",
+                    err
+                );
+
             });
+
     }
+
 
     if (!book) {
         return <p>Loading...</p>;
     }
 
+
     return (
         <article className="form-editor__item">
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Title</h3>
+            <label>
+
+                <h3>Title</h3>
 
                 <input
-                    className="form-editor__input"
                     type="text"
-                    value={book.Title || ""}
+                    value={book.title || ""}
                     onChange={(e) =>
-                        handleChange("Title", e.target.value)
+                        handleChange(
+                            "title",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Author</h3>
+
+            <label>
+
+                <h3>Author</h3>
 
                 <input
-                    className="form-editor__input"
                     type="text"
-                    value={book.Author || ""}
+                    value={book.author || ""}
                     onChange={(e) =>
-                        handleChange("Author", e.target.value)
+                        handleChange(
+                            "author",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Rating</h3>
+
+            <label>
+
+                <h3>Rating</h3>
 
                 <input
-                    className="form-editor__input"
                     type="number"
                     min="0"
                     max="5"
-                    value={book.Stars || ""}
+                    value={book.stars ?? ""}
                     onChange={(e) =>
-                        handleChange("Stars", e.target.value)
+                        handleChange(
+                            "stars",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">
-                    Description
-                </h3>
+
+            <label>
+
+                <h3>Description</h3>
 
                 <textarea
-                    className="form_editor__textarea"
-                    value={book.Description || ""}
+                    value={book.description || ""}
                     onChange={(e) =>
-                        handleChange("Description", e.target.value)
+                        handleChange(
+                            "description",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Review</h3>
+
+            <label>
+
+                <h3>Review</h3>
 
                 <textarea
-                    className="form_editor__textarea"
-                    value={book.Review || ""}
+                    value={book.review || ""}
                     onChange={(e) =>
-                        handleChange("Review", e.target.value)
+                        handleChange(
+                            "review",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
+
 
             <button
-                className="form-editor__button"
                 type="button"
                 onClick={handleUpdate}
             >
                 Change
             </button>
 
+
             <button
-                className="form-editor__button"
                 type="button"
                 onClick={handleDelete}
             >
@@ -466,214 +746,369 @@ function LoadBookId({ bookId }) {
 
 
 /* =========================================================
-   MOVIES
+   MOVIE REVIEWS
 ========================================================= */
 
 function MovieEdit() {
+
     const [movies, setMovies] = useState([]);
     const [id, setId] = useState("");
 
+
     useEffect(() => {
-        fetch("http://localhost/blog/backend/movieLoad.php", {
+
+        fetch(`${API}/postsLoad.php`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 category: "movieReview"
             })
+
         })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Movies list:", data);
-                setMovies(Array.isArray(data) ? data : []);
+
+                console.log(
+                    "Movies list:",
+                    data
+                );
+
+                setMovies(
+                    Array.isArray(data)
+                        ? data
+                        : []
+                );
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "Movies loading error:",
+                    err
+                );
+
             });
+
     }, []);
+
 
     return (
         <article className="form-edit">
-            <form className="form-edit__select-form">
-                <select
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                >
-                    <option value="">Choose a Post</option>
 
-                    {movies.map((item) => (
-                        <option
-                            key={item.MovieReview_ID}
-                            value={item.MovieReview_ID}
-                            className="form-edit__option"
-                        >
-                            {item.Title}
-                        </option>
-                    ))}
-                </select>
-            </form>
+            <select
+                value={id}
+                onChange={(e) =>
+                    setId(e.target.value)
+                }
+            >
 
-            {id && <LoadMovieId movieId={id} />}
+                <option value="">
+                    Choose a Post
+                </option>
+
+                {movies.map((item) => (
+
+                    <option
+                        key={item.movieReviewId}
+                        value={item.movieReviewId}
+                    >
+                        {item.title}
+                    </option>
+
+                ))}
+
+            </select>
+
+
+            {id && (
+                <LoadMovieId
+                    movieReviewId={id}
+                />
+            )}
+
         </article>
     );
 }
 
 
-function LoadMovieId({ movieId }) {
+function LoadMovieId({ movieReviewId }) {
+
     const [movie, setMovie] = useState(null);
 
+
     useEffect(() => {
-        fetch(
-            `http://localhost/blog/backend/loadIdPost.php?movieId=${movieId}`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    category: "movieReview"
-                })
-            }
-        )
+
+        fetch(`${API}/postsLoad.php`, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                category: "movieReview",
+
+                movieReviewId: movieReviewId
+
+            })
+
+        })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Selected movie:", data);
+
+                console.log(
+                    "Selected movie:",
+                    data
+                );
 
                 if (Array.isArray(data)) {
                     setMovie(data[0] || null);
                 } else {
                     setMovie(data);
                 }
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "Movie loading error:",
+                    err
+                );
+
             });
-    }, [movieId]);
+
+    }, [movieReviewId]);
+
 
     function handleChange(field, value) {
+
         setMovie((previous) => ({
             ...previous,
             [field]: value
         }));
+
     }
+
 
     function handleUpdate() {
-        fetch("http://localhost/blog/backend/changePost.php", {
+
+        fetch(`${API}/editPost.php`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
+
                 category: "movieReview",
-                MovieReview_ID: movie.MovieReview_ID,
-                title: movie.Title,
-                stars: movie.Stars,
-                description: movie.Description,
-                review: movie.Review
+
+                movieReviewId:
+                    movie.movieReviewId,
+
+                title:
+                    movie.title,
+
+                stars:
+                    Number(movie.stars),
+
+                description:
+                    movie.description,
+
+                review:
+                    movie.review
+
             })
+
         })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Updated:", data);
+
+                console.log(
+                    "Movie update:",
+                    data
+                );
+
+                alert(data.message);
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "Movie update error:",
+                    err
+                );
+
             });
+
     }
 
+
     function handleDelete() {
-        fetch("http://localhost/blog/backend/deletePost.php", {
+
+        if (
+            !window.confirm(
+                "Are you sure you want to delete this movie?"
+            )
+        ) {
+            return;
+        }
+
+
+        fetch(`${API}/deletePost.php`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
+
                 category: "movieReview",
-                MovieReview_ID: movie.MovieReview_ID
+
+                movieReviewId:
+                    movie.movieReviewId
+
             })
+
         })
+
             .then((res) => res.json())
+
             .then((data) => {
-                console.log("Deleted:", data);
-                setMovie(null);
+
+                console.log(
+                    "Movie delete:",
+                    data
+                );
+
+                alert(data.message);
+
+                if (data.success) {
+                    setMovie(null);
+                }
+
             })
+
             .catch((err) => {
-                console.log(err);
+
+                console.error(
+                    "Movie delete error:",
+                    err
+                );
+
             });
+
     }
+
 
     if (!movie) {
         return <p>Loading...</p>;
     }
 
+
     return (
         <article className="form-editor__item">
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Title</h3>
+            <label>
+
+                <h3>Title</h3>
 
                 <input
-                    className="form-editor__input"
                     type="text"
-                    value={movie.Title || ""}
+                    value={movie.title || ""}
                     onChange={(e) =>
-                        handleChange("Title", e.target.value)
+                        handleChange(
+                            "title",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Rating</h3>
+
+            <label>
+
+                <h3>Rating</h3>
 
                 <input
-                    className="form-editor__input"
                     type="number"
                     min="0"
                     max="5"
-                    value={movie.Stars || ""}
+                    value={movie.stars ?? ""}
                     onChange={(e) =>
-                        handleChange("Stars", e.target.value)
+                        handleChange(
+                            "stars",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">
-                    Description
-                </h3>
+
+            <label>
+
+                <h3>Description</h3>
 
                 <textarea
-                    className="form_editor__textarea"
-                    value={movie.Description || ""}
+                    value={movie.description || ""}
                     onChange={(e) =>
-                        handleChange("Description", e.target.value)
+                        handleChange(
+                            "description",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
 
-            <label className="form-editor___field">
-                <h3 className="form-editor__label">Review</h3>
+
+            <label>
+
+                <h3>Review</h3>
 
                 <textarea
-                    className="form_editor__textarea"
-                    value={movie.Review || ""}
+                    value={movie.review || ""}
                     onChange={(e) =>
-                        handleChange("Review", e.target.value)
+                        handleChange(
+                            "review",
+                            e.target.value
+                        )
                     }
                 />
+
             </label>
+
 
             <button
-                className="form-editor__button"
                 type="button"
                 onClick={handleUpdate}
             >
                 Change
             </button>
 
+
             <button
-                className="form-editor__button"
                 type="button"
                 onClick={handleDelete}
             >

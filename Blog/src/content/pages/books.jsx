@@ -24,21 +24,22 @@ export function Books() {
             });
     }, [])
     return (
-        <main>
+        <main className="main">
             <section className="header">
-                <h1>Book Reviews</h1>
+                <h1 className="headerText">Book Reviews</h1>
                 <article className="header-info">
                     <h2>About : </h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, voluptas ratione repellendus beatae voluptates velit tempore similique fugiat reiciendis amet, cumque expedita minus autem animi obcaecati laboriosam, ducimus eaque aperiam.</p>
+                    <p>As a young woman, I’ve always loved reading. I especially enjoy fiction and fantasy, and I can easily get lost in a good story. Reading has always been a big part of my life, and I’d love to share my book recommendations, thoughts, and opinions with others who enjoy reading as much as I do.</p>
                 </article>
             </section>
             <section className="main-content">
                 <h2 className="main-content-header">Book Reviews: </h2>
+                <div className="mainCardContainer">
                 {book.map((item) => (
                     <article className="main-content-card" key={item.bookReviewId}>
                         <div>
                             <h2>{item.title}</h2>
-                            <h2>{item.author}</h2>
+                            <h3>{item.author}</h3>
                         </div>
                         <div key={item.bookReviewId}>
                             <p className="Description">{item.description}</p>
@@ -48,6 +49,7 @@ export function Books() {
                         </div>
                     </article>
                 ))}
+                </div>
             </section>
         </main>
     )

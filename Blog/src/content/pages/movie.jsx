@@ -30,7 +30,7 @@ export function Movie() {
                 <h1>Movie Reviews</h1>
                 <article className="header-info">
                     <h2>About: </h2>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam omnis debitis perferendis reprehenderit error totam nostrum, cum rem tempora maxime earum praesentium doloribus delectus mollitia in quo aliquid voluptatum ut.</p>
+                    <p>As a young woman, I’ve always loved watching movies. I enjoy all kinds of stories, especially fiction and fantasy, and I love discovering new characters, worlds, and adventures. Movies have always been a great way for me to escape into a different story, and I’d love to share my recommendations and opinions with others.</p>
                 </article>
             </section>
             <section className="main-content">

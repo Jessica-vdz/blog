@@ -43,17 +43,15 @@ export function NewsPost() {
         <main>
             <section className="header">
                 <h1>News</h1>
-                <article className="header-info">
-                    <h2>About</h2>
+                <article className="headerInfo">
+                    <h3>About</h3>
                     <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic iusto tempore, deserunt maiores beatae, consectetur modi dolores facilis debitis minus odio. Iusto rerum suscipit voluptas fugiat quidem nisi laborum laudantium.</p>
                 </article>
             </section>
             <section className="main-content">
                 <article className="main-content-card">
+                        <h2 className="headerText">{news.title}</h2>
                     <div className="main-content-card-header">
-                        <h2>{news.title}</h2>
-                    </div>
-                    <div>
                         <p>{news.description}</p>
                     </div>
                 </article>

@@ -48,7 +48,7 @@ export function Register() {
         <section className="main-content">
             <article className={"formContainer"}>
                 <h1 className={"main-content-header"}>REGISTREREN</h1>
-                <form onSubmit={handleSubmit} className={"main-content-card"}>
+                <form onSubmit={handleSubmit} >
                     <div className={"formInfo"}>
                         <label className="formContent">
                             <h3 className={"formTitle"}>Name</h3>
@@ -156,7 +156,7 @@ export function Login() {
             <article className="formContainer">
                 <h1 className={"main-content-header"}>LOGIN</h1>
 
-                <form onSubmit={handleSubmit} className={"main-content-card"}>
+                <form onSubmit={handleSubmit} >
                     <div className={"formInfo"}>
                         <label className={"formContent"}>
                             <h3>E-mail</h3>

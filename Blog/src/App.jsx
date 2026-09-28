@@ -17,14 +17,21 @@ function App() {
   return (
     <>
       <BrowserRouter>
-
-        <div className="Navigation">
-          <nav className="Navigation-Links">
-            <Link to="">Home</Link>
-            <Link to="books">Books</Link>
-            <Link to="movie">Movie</Link>
+          <nav className="navigation">
+            <Link to="" className='navItem'>
+              <h4>Home</h4>
+            </Link>
+            <Link to="books" className='navItem'>
+              <h4>
+                Books
+              </h4>
+            </Link>
+            <Link to="movie" className='navItem'>
+              <h4>
+                Movie
+              </h4>
+            </Link>
           </nav>
-        </div>
 
         <Routes>
           <Route path='' element={<News />} />
