@@ -18,23 +18,10 @@ I generated the frontend using React and developed the entire backend myself usi
 
 ## Tech Stack
 
+**Software**
 - **Frontend:** React
 - **Backend:** PHP
 - **Database:** SQL
-
-## What I Learned
-
-This project was an important step in my development as a programmer. It gave me practical experience with:
-
-- Building a backend using PHP.
-- Working with SQL databases and storing data.
-- Connecting a frontend to a backend.
-- Implementing functionality for creating and editing content.
-- Understanding how the different parts of a web application work together.
-
-## Project Goal
-
-The main goal of this project was to improve my backend development skills and gain experience working with databases. By generating the frontend and building the backend myself, I was able to dedicate most of my attention to the parts of development I wanted to improve.
 
 ---
 
